@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aiblop — Fill Your Barbershop Automatically</title>
+  <title>Aiblop — Organiza tu barbería automáticamente</title>
   <script>
     (function () {
       const saved = localStorage.getItem('theme');
-
       if (saved === 'dark') {
         document.documentElement.classList.add('dark');
       } else if (saved === 'light') {
@@ -23,271 +22,175 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { font-family: 'Inter', sans-serif; box-sizing: border-box; }
-
-    /* Noise */
     .dark body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      opacity: 0.022;
-      pointer-events: none;
-      z-index: 999;
+      content: ''; position: fixed; inset: 0; opacity: 0.022; pointer-events: none; z-index: 999;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
-
-    /* 1: Hero fade-in */
-    @keyframes hFade { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    /* 1 Hero fade */
+    @keyframes hFade { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
     .h-in { opacity:0; animation: hFade .45s ease forwards; }
-
-    /* 2: Word rotation */
-    #rw { display:inline-block; transition: opacity .28s ease, transform .28s ease; }
+    /* 2 Word rotation */
+    #rw { display:inline-block; min-width:5em; transition: opacity .26s ease, transform .26s ease; }
     #rw.out { opacity:0; transform:translateY(7px); }
-
-    /* 3: CTA pulse */
-    @keyframes ctaP {
-      0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,.55); }
-      60%      { box-shadow: 0 0 0 12px rgba(220,38,38,0); }
-    }
+    /* 3 CTA pulse */
+    @keyframes ctaP { 0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.55)} 60%{box-shadow:0 0 0 12px rgba(220,38,38,0)} }
     .cta-p { animation: ctaP 2.6s ease-in-out infinite; }
-
-    /* Slot slide-in */
-    @keyframes sIn { from { opacity:0; transform:translateX(-5px); } to { opacity:1; transform:translateX(0); } }
+    /* Slot slide */
+    @keyframes sIn { from{opacity:0;transform:translateX(-5px)} to{opacity:1;transform:translateX(0)} }
     .slot { opacity:0; }
     .slot.show { animation: sIn .3s ease forwards; }
-
-    /* Float card bounce-in */
-    @keyframes fIn { 0%{ opacity:0; transform:scale(.92) translateY(6px); } 100%{ opacity:1; transform:scale(1) translateY(0); } }
+    /* Float card */
+    @keyframes fIn { 0%{opacity:0;transform:scale(.92) translateY(6px)} 100%{opacity:1;transform:scale(1) translateY(0)} }
     .fc { opacity:0; }
     .fc.show { animation: fIn .4s cubic-bezier(.34,1.56,.64,1) forwards; }
-
-    /* Demo pulse dot */
-    @keyframes pdot { 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
+    /* Pulse dot */
+    @keyframes pdot { 0%,100%{opacity:1} 50%{opacity:.3} }
     .pdot { animation: pdot 1.4s ease-in-out infinite; }
-
-    /* FAQ accordion */
-    .faq-body { max-height:0; overflow:hidden; transition: max-height .3s ease; }
-    .faq-body.open { max-height:200px; }
-
-    /* Card hover lift */
-    .lift { transition: transform .15s ease, box-shadow .15s ease; }
-    .lift:hover { transform:translateY(-2px); }
-
-    html:not(.dark) .lift {
-      box-shadow: 0 22px 60px rgba(37,99,235,.10), 0 8px 20px rgba(0,0,0,.06);
-    }
-    html:not(.dark) .lift:hover {
-      box-shadow: 0 30px 80px rgba(37,99,235,.16), 0 10px 26px rgba(0,0,0,.08);
-    }
-    html:not(.dark) .faq-item {
-      box-shadow: 0 22px 60px rgba(37,99,235,.10), 0 8px 20px rgba(0,0,0,.06);
-    }
-    html:not(.dark) .soft-shadow {
-      box-shadow: 0 40px 110px rgba(37,99,235,.14), 0 24px 60px rgba(0,0,0,.06);
-    }
+    /* Carousel */
+    .slide { display:none !important; }
+    .slide.active { display:grid !important; animation: slideIn .4s ease; }
+    @keyframes slideIn { from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:translateX(0)} }
+    /* Check bounce */
+    @keyframes checkIn { from{opacity:0;transform:scale(.5)} to{opacity:1;transform:scale(1)} }
+    .check-in { animation: checkIn .3s cubic-bezier(.34,1.56,.64,1) forwards; }
+    /* Lift */
+    .lift { transition: transform .15s ease; }
+    .lift:hover { transform: translateY(-2px); }
+    html:not(.dark) .lift { box-shadow: 0 22px 60px rgba(37,99,235,.10), 0 8px 20px rgba(0,0,0,.06); }
+    html:not(.dark) .lift:hover { box-shadow: 0 30px 80px rgba(37,99,235,.16), 0 10px 26px rgba(0,0,0,.08); }
+    html:not(.dark) .soft-shadow { box-shadow: 0 40px 110px rgba(37,99,235,.14), 0 24px 60px rgba(0,0,0,.06); }
     html.dark .soft-shadow { box-shadow: none; }
-    html:not(.dark) .price-shadow {
-      box-shadow: 0 0 0 1px rgba(220,38,38,.15), 0 40px 110px rgba(37,99,235,.10), 0 30px 80px rgba(220,38,38,.08);
-    }
-
-    /* Smooth scroll offset for anchors */
+    html:not(.dark) .price-shadow { box-shadow: 0 0 0 1px rgba(220,38,38,.15), 0 40px 110px rgba(37,99,235,.10), 0 30px 80px rgba(220,38,38,.08); }
     :target { scroll-margin-top: 80px; }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
-    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after{ animation-duration:.01ms!important; transition-duration:.01ms!important; } }
   </style>
 </head>
-
 <body class="bg-[#f6f8ff] dark:bg-[#07070e] text-gray-900 dark:text-white transition-colors duration-300">
 
-<!-- ░░ BLUR BLOBS (dark only) ░░ -->
+<!-- Blobs oscuros -->
 <div aria-hidden="true" class="pointer-events-none fixed inset-0 overflow-hidden z-0 hidden dark:block">
-  <div class="absolute rounded-full" style="width:600px;height:600px;top:-180px;left:-180px;background:radial-gradient(circle,rgba(220,38,38,.2),transparent 70%);filter:blur(70px)"></div>
-  <div class="absolute rounded-full" style="width:500px;height:500px;bottom:-100px;right:-80px;background:radial-gradient(circle,rgba(37,99,235,.15),transparent 70%);filter:blur(70px)"></div>
+  <div class="absolute rounded-full" style="width:620px;height:620px;top:-180px;left:-160px;background:radial-gradient(circle,rgba(220,38,38,.17),transparent 70%);filter:blur(70px)"></div>
+  <div class="absolute rounded-full" style="width:500px;height:500px;bottom:-100px;right:-80px;background:radial-gradient(circle,rgba(37,99,235,.12),transparent 70%);filter:blur(70px)"></div>
 </div>
-
 <div aria-hidden="true" class="pointer-events-none fixed inset-0 overflow-hidden z-0 block dark:hidden">
   <div class="absolute rounded-full" style="width:560px;height:560px;top:-200px;right:-180px;background:radial-gradient(circle,rgba(37,99,235,.22),transparent 68%);filter:blur(80px)"></div>
   <div class="absolute rounded-full" style="width:520px;height:520px;bottom:-180px;left:-160px;background:radial-gradient(circle,rgba(220,38,38,.12),transparent 70%);filter:blur(90px)"></div>
 </div>
 
-<!-- ░░░░░░░░░░░░░░░░ NAVBAR ░░░░░░░░░░░░░░░░ -->
-<nav class="sticky top-0 z-50 border-b border-gray-100 dark:border-white/[.06]
-            bg-white/90 dark:bg-[#07070e]/90 backdrop-blur-md">
+<!-- ════════════ NAVBAR ════════════ -->
+<nav class="sticky top-0 z-50 border-b border-gray-100 dark:border-white/[.06] bg-white/90 dark:bg-[#07070e]/90 backdrop-blur-md">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16">
-
-    <!-- Logo -->
     <a href="#" class="flex items-center gap-2">
       <div class="w-7 h-7 rounded-lg bg-red-600 flex items-center justify-center">
-        <svg width="14" height="14" fill="none" viewBox="0 0 14 14">
-          <path d="M7 1.5l5.5 3.2v6.6L7 14.5 1.5 11.3V4.7L7 1.5z" fill="white"/>
-        </svg>
+        <svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M7 1.5l5.5 3.2v6.6L7 14.5 1.5 11.3V4.7L7 1.5z" fill="white"/></svg>
       </div>
       <span class="text-sm font-bold tracking-tight">aiblop</span>
     </a>
-
-    <!-- Links -->
     <div class="hidden md:flex gap-7 text-sm text-gray-500 dark:text-zinc-400">
-      <a href="#how" class="hover:text-gray-900 dark:hover:text-white transition-colors" data-en="How it works" data-es="Cómo funciona">How it works</a>
-      <a href="#demo" class="hover:text-gray-900 dark:hover:text-white transition-colors" data-en="Demo" data-es="Demo">Demo</a>
-      <a href="#pricing" class="hover:text-gray-900 dark:hover:text-white transition-colors" data-en="Pricing" data-es="Precios">Pricing</a>
+      <a href="#como" class="hover:text-gray-900 dark:hover:text-white transition-colors">Cómo funciona</a>
+      <a href="#demo" class="hover:text-gray-900 dark:hover:text-white transition-colors">Demo</a>
+      <a href="#precio" class="hover:text-gray-900 dark:hover:text-white transition-colors">Precio</a>
     </div>
-
-    <!-- Right -->
     <div class="flex items-center gap-3">
-      <button id="lang-btn" onclick="toggleLang()"
-              class="h-8 px-2.5 rounded-lg border border-gray-200 dark:border-white/10
-                     bg-gray-50 dark:bg-white/[.04] text-[12px] font-semibold tracking-wide
-                     hover:bg-gray-100 dark:hover:bg-white/[.08] transition-colors"
-              aria-label="Toggle language">ES</button>
-      <!-- Theme toggle -->
-      <button id="theme-btn" onclick="toggleTheme()"
-              class="w-8 h-8 rounded-lg border border-gray-200 dark:border-white/10
-                     bg-gray-50 dark:bg-white/[.04] flex items-center justify-center
-                     hover:bg-gray-100 dark:hover:bg-white/[.08] transition-colors"
-              aria-label="Toggle theme">
-        <svg id="sun-icon" class="hidden dark:block" width="15" height="15" fill="none" viewBox="0 0 15 15">
-          <circle cx="7.5" cy="7.5" r="3" stroke="currentColor" stroke-width="1.3"/>
-          <path d="M7.5 1v1.5M7.5 12.5V14M1 7.5h1.5M12.5 7.5H14M3.3 3.3l1 1M10.7 10.7l1 1M10.7 3.3l-1 1M3.3 10.7l-1 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        </svg>
-        <svg id="moon-icon" class="block dark:hidden" width="14" height="14" fill="none" viewBox="0 0 14 14">
-          <path d="M12 9a6 6 0 01-7.5-7.5A6 6 0 1012 9z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        </svg>
+      <button onclick="toggleTheme()" aria-label="Cambiar tema"
+              class="w-8 h-8 rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[.04] flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/[.08] transition-colors">
+        <svg class="hidden dark:block" width="15" height="15" fill="none" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M7.5 1v1.5M7.5 12.5V14M1 7.5h1.5M12.5 7.5H14M3.3 3.3l1 1M10.7 10.7l1 1M10.7 3.3l-1 1M3.3 10.7l-1 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <svg class="block dark:hidden" width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M12 9a6 6 0 01-7.5-7.5A6 6 0 1012 9z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       </button>
-
-      <a href="#pricing"
-         class="text-sm font-semibold bg-red-600 hover:bg-red-700 text-white
-                px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
-        <span data-en="Get more clients" data-es="Consigue más clientes">Get more clients</span>
+      <a href="#precio" class="text-sm font-semibold bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
+        Empieza — 30 días de garantía
       </a>
     </div>
   </div>
 </nav>
 
-<!-- ░░░░░░░░░░░░░░░░ HERO ░░░░░░░░░░░░░░░░ -->
+<!-- ════════════ HERO ════════════ -->
 <section class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 xl:px-12">
-  <div class="grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 items-center
-              min-h-[calc(100vh-64px)] py-14 lg:py-0">
+  <div class="grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 items-center min-h-[calc(100vh-64px)] py-14 lg:py-0">
 
-    <!-- LEFT -->
+    <!-- Izquierda -->
     <div>
-      <div class="h-in inline-flex items-center gap-2 rounded-full border border-red-200 dark:border-red-500/25
-                  bg-red-50 dark:bg-red-500/[.08] px-3.5 py-1.5 text-xs font-medium
-                  text-red-600 dark:text-red-300 mb-6" style="animation-delay:.05s">
-        <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"
-              style="box-shadow:0 0 6px #22c55e"></span>
-        <span data-en="500+ barbershops filling their chairs" data-es="500+ barberías llenando sus sillas">500+ barbershops filling their chairs</span>
+      <div class="h-in inline-flex items-center gap-2 rounded-full border border-red-200 dark:border-red-500/25 bg-red-50 dark:bg-red-500/[.08] px-3.5 py-1.5 text-xs font-medium text-red-600 dark:text-red-300 mb-6" style="animation-delay:.05s">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" style="box-shadow:0 0 6px #22c55e"></span>
+        Gestiona tu calendario mejor que tu barbería vecina
       </div>
 
-      <h1 class="h-in text-[2.6rem] sm:text-5xl lg:text-[3.4rem] font-black leading-[1.08]
-                 tracking-[-0.035em] mb-5" style="animation-delay:.1s">
-        <span data-en-html="No more<br>empty chairs.<br>" data-es-html="No más<br>sillas vacías.<br>">No more<br>empty chairs.<br></span>
-        <span class="text-gray-500 dark:text-zinc-300 font-extrabold" data-en="Fill your barbershop" data-es="Llena tu barbería">Fill your barbershop</span><br>
-        <span class="text-gray-500 dark:text-zinc-300 font-extrabold" data-en="automatically with" data-es="automáticamente con">automatically with</span><br>
-        <span id="rw" class="text-red-600">haircuts</span>
+      <h1 class="h-in text-[2.6rem] sm:text-5xl lg:text-[3.4rem] font-black leading-[1.08] tracking-[-0.035em] mb-5" style="animation-delay:.1s">
+        No más huecos<br>vacíos.<br>
+        <span style="white-space:nowrap"><span class="text-gray-500 dark:text-zinc-300 font-extrabold">Organiza tus</span>
+        <span id="rw" class="text-red-600">citas</span></span><br>
+        <span class="text-gray-500 dark:text-zinc-300 font-extrabold">automáticamente</span>
       </h1>
 
-      <p class="h-in text-base sm:text-lg text-gray-500 dark:text-zinc-400 leading-relaxed mb-8 max-w-[430px]"
-         style="animation-delay:.2s">
-        <span data-en="Reduce no-shows by up to 80% and fill empty slots with automated bookings and WhatsApp reminders — on autopilot."
-              data-es="Reduce los no-shows hasta un 80% y llena huecos con reservas automáticas y recordatorios por WhatsApp — en piloto automático.">
-          Reduce no-shows by up to 80% and fill empty slots with automated
-          bookings and WhatsApp reminders — on autopilot.
-        </span>
+      <p class="h-in text-base sm:text-lg text-gray-500 dark:text-zinc-400 leading-relaxed mb-8 max-w-[430px]" style="animation-delay:.2s">
+        Reduce las inasistencias y llena huecos con reservas automáticas y recordatorios por WhatsApp — sin esfuerzo.
       </p>
 
       <div class="h-in flex flex-col sm:flex-row gap-3 mb-10" style="animation-delay:.28s">
-        <a href="#pricing"
-           class="cta-p inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700
-                  text-white font-semibold px-7 py-4 rounded-xl text-sm transition-colors">
-          <span data-en="Get more clients" data-es="Consigue más clientes">Get more clients</span>
-          <svg width="15" height="15" fill="none" viewBox="0 0 15 15">
-            <path d="M3 7.5h9M8.5 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+        <a href="#precio" class="cta-p inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold px-7 py-4 rounded-xl text-sm transition-colors">
+          Empieza — 30 días de garantía
+          <svg width="15" height="15" fill="none" viewBox="0 0 15 15"><path d="M3 7.5h9M8.5 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <a href="#demo"
-           class="inline-flex items-center justify-center gap-2
-                  bg-gray-100 dark:bg-white/[.05] hover:bg-gray-200 dark:hover:bg-white/[.09]
-                  border border-gray-200 dark:border-white/10 text-gray-800 dark:text-white
-                  font-medium px-7 py-4 rounded-xl text-sm transition-colors">
-          <svg width="15" height="15" fill="none" viewBox="0 0 15 15">
-            <circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.4"/>
-            <path d="M6 5l4.5 2.5L6 10V5z" fill="currentColor"/>
-          </svg>
-          <span data-en="See demo" data-es="Ver demo">See demo</span>
+        <a href="#demo" class="inline-flex items-center justify-center gap-2 bg-gray-100 dark:bg-white/[.05] hover:bg-gray-200 dark:hover:bg-white/[.09] border border-gray-200 dark:border-white/10 text-gray-800 dark:text-white font-medium px-7 py-4 rounded-xl text-sm transition-colors">
+          <svg width="15" height="15" fill="none" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M6 5l4.5 2.5L6 10V5z" fill="currentColor"/></svg>
+          Ver demo
         </a>
       </div>
 
-      <!-- Social proof row -->
       <div class="h-in flex items-center gap-3" style="animation-delay:.35s">
         <div class="flex -space-x-2">
-          <div class="w-7 h-7 rounded-full border-2 border-white dark:border-[#07070e]
-                      bg-gradient-to-br from-red-400 to-rose-600 flex items-center justify-center
-                      text-[9px] font-bold text-white">M</div>
-          <div class="w-7 h-7 rounded-full border-2 border-white dark:border-[#07070e]
-                      bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center
-                      text-[9px] font-bold text-white">K</div>
-          <div class="w-7 h-7 rounded-full border-2 border-white dark:border-[#07070e]
-                      bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center
-                      text-[9px] font-bold text-white">J</div>
-          <div class="w-7 h-7 rounded-full border-2 border-white dark:border-[#07070e]
-                      bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center
-                      text-[9px] font-bold text-white">A</div>
+          <div class="w-7 h-7 rounded-full border-2 border-white dark:border-[#07070e] bg-gradient-to-br from-red-400 to-rose-600 flex items-center justify-center text-[9px] font-bold text-white">M</div>
+          <div class="w-7 h-7 rounded-full border-2 border-white dark:border-[#07070e] bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-[9px] font-bold text-white">K</div>
+          <div class="w-7 h-7 rounded-full border-2 border-white dark:border-[#07070e] bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-[9px] font-bold text-white">J</div>
+          <div class="w-7 h-7 rounded-full border-2 border-white dark:border-[#07070e] bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-[9px] font-bold text-white">A</div>
         </div>
         <p class="text-sm text-gray-500 dark:text-zinc-500">
-          <span class="text-gray-900 dark:text-zinc-100 font-semibold" data-en="2,847 bookings" data-es="2.847 reservas">2,847 bookings</span>
-          <span data-en="filled this week" data-es="llenadas esta semana">filled this week</span>
+          <span class="text-gray-900 dark:text-zinc-100 font-semibold" id="hero-bookings"></span> llenadas esta semana
         </p>
       </div>
     </div>
 
-    <!-- RIGHT: Calendar -->
+    <!-- Derecha: Calendario falso -->
     <div class="h-in relative" style="animation-delay:.18s">
-      <div class="soft-shadow relative rounded-2xl border border-gray-100 dark:border-white/[.07]
-                  bg-gray-50 dark:bg-white/[.025] p-5 shadow-xl dark:shadow-none backdrop-blur-sm">
+      <div class="soft-shadow relative rounded-2xl border border-gray-100 dark:border-white/[.07] bg-gray-50 dark:bg-white/[.025] p-5 shadow-xl backdrop-blur-sm">
 
-        <!-- Calendar header -->
         <div class="flex items-start justify-between mb-5">
           <div>
-            <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-medium uppercase tracking-widest mb-1">Schedule</p>
-            <p class="text-sm font-semibold">Week of Apr 14, 2026</p>
+            <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-medium uppercase tracking-widest mb-1">Agenda semanal</p>
+            <p class="text-sm font-semibold">Semana del 14 Abr, 2026</p>
           </div>
-          <span class="inline-flex items-center gap-1.5 rounded-full border border-green-300 dark:border-green-500/25
-                       bg-green-50 dark:bg-green-500/10 px-2.5 py-1 text-[11px] font-medium
-                       text-green-700 dark:text-green-400">
-            <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"
-                  style="box-shadow:0 0 5px #22c55e"></span>
-            <span id="hbc">3</span> new today
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-green-300 dark:border-green-500/25 bg-green-50 dark:bg-green-500/10 px-2.5 py-1 text-[11px] font-medium text-green-700 dark:text-green-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-green-500" style="box-shadow:0 0 5px #22c55e"></span>
+            <span id="hbc">3</span> nuevas hoy
           </span>
         </div>
 
-        <!-- Days -->
         <div class="grid grid-cols-5 gap-1.5 mb-2">
-          <p class="text-center text-[10px] text-gray-400 dark:text-zinc-600 font-medium uppercase tracking-widest">Mon</p>
-          <p class="text-center text-[10px] text-gray-400 dark:text-zinc-600 font-medium uppercase tracking-widest">Tue</p>
-          <p class="text-center text-[10px] text-red-500 font-semibold uppercase tracking-widest">Wed ●</p>
-          <p class="text-center text-[10px] text-gray-400 dark:text-zinc-600 font-medium uppercase tracking-widest">Thu</p>
-          <p class="text-center text-[10px] text-gray-400 dark:text-zinc-600 font-medium uppercase tracking-widest">Fri</p>
+          <p class="text-center text-[10px] text-gray-400 dark:text-zinc-600 font-medium uppercase">Lun</p>
+          <p class="text-center text-[10px] text-gray-400 dark:text-zinc-600 font-medium uppercase">Mar</p>
+          <p class="text-center text-[10px] text-red-500 font-semibold uppercase">Mié ●</p>
+          <p class="text-center text-[10px] text-gray-400 dark:text-zinc-600 font-medium uppercase">Jue</p>
+          <p class="text-center text-[10px] text-gray-400 dark:text-zinc-600 font-medium uppercase">Vie</p>
         </div>
 
-        <!-- Row 9:00 -->
+        <!-- Fila 9:00 -->
         <div class="grid grid-cols-5 gap-1.5 mb-1.5">
           <div class="slot rounded-lg border border-red-200 dark:border-red-500/25 bg-red-50 dark:bg-red-500/[.13] p-2" data-ms="500">
             <p class="text-[9px] text-red-500 dark:text-red-300 font-medium mb-0.5">9:00</p>
             <p class="text-[11px] font-semibold truncate">Marco R.</p>
-            <p class="text-[9px] text-gray-400 truncate">Haircut</p>
+            <p class="text-[9px] text-gray-400 truncate">Corte</p>
           </div>
           <div class="slot rounded-lg border border-blue-200 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/[.1] p-2" data-ms="780">
             <p class="text-[9px] text-blue-500 dark:text-blue-300 font-medium mb-0.5">9:00</p>
             <p class="text-[11px] font-semibold truncate">Kevin D.</p>
-            <p class="text-[9px] text-gray-400 truncate">Beard trim</p>
+            <p class="text-[9px] text-gray-400 truncate">Barba</p>
           </div>
           <div class="rounded-lg border border-gray-100 dark:border-white/[.05] bg-gray-100 dark:bg-white/[.02] p-2 flex items-center justify-center">
             <span class="text-[10px] text-gray-300 dark:text-zinc-700">9:00</span>
           </div>
           <div class="slot rounded-lg border border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/[.1] p-2" data-ms="1100">
             <p class="text-[9px] text-amber-600 dark:text-amber-300 font-medium mb-0.5">9:00</p>
-            <p class="text-[11px] font-semibold truncate">James T.</p>
+            <p class="text-[11px] font-semibold truncate">Jaime T.</p>
             <p class="text-[9px] text-gray-400 truncate">Color</p>
           </div>
           <div class="rounded-lg border border-gray-100 dark:border-white/[.05] bg-gray-100 dark:bg-white/[.02] p-2 flex items-center justify-center">
@@ -295,12 +198,12 @@
           </div>
         </div>
 
-        <!-- Row 10:30 -->
+        <!-- Fila 10:30 -->
         <div class="grid grid-cols-5 gap-1.5 mb-1.5">
           <div class="slot rounded-lg border border-teal-200 dark:border-teal-500/20 bg-teal-50 dark:bg-teal-500/[.1] p-2" data-ms="920">
             <p class="text-[9px] text-teal-600 dark:text-teal-300 font-medium mb-0.5">10:30</p>
-            <p class="text-[11px] font-semibold truncate">Ali M.</p>
-            <p class="text-[9px] text-gray-400 truncate">Full cut</p>
+            <p class="text-[11px] font-semibold truncate">Alí M.</p>
+            <p class="text-[9px] text-gray-400 truncate">Corte completo</p>
           </div>
           <div class="rounded-lg border border-gray-100 dark:border-white/[.05] bg-gray-100 dark:bg-white/[.02] p-2 flex items-center justify-center">
             <span class="text-[10px] text-gray-300 dark:text-zinc-700">10:30</span>
@@ -309,7 +212,7 @@
             <span class="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-green-500 border-2 border-white dark:border-[#07070e]" style="box-shadow:0 0 6px #22c55e"></span>
             <p class="text-[9px] text-red-500 dark:text-red-300 font-medium mb-0.5">10:30</p>
             <p class="text-[11px] font-semibold truncate">Carlos B.</p>
-            <p class="text-[9px] text-gray-400 truncate">Haircut</p>
+            <p class="text-[9px] text-gray-400 truncate">Corte</p>
           </div>
           <div class="rounded-lg border border-gray-100 dark:border-white/[.05] bg-gray-100 dark:bg-white/[.02] p-2 flex items-center justify-center">
             <span class="text-[10px] text-gray-300 dark:text-zinc-700">10:30</span>
@@ -317,11 +220,11 @@
           <div class="slot rounded-lg border border-blue-200 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/[.1] p-2" data-ms="1350">
             <p class="text-[9px] text-blue-500 dark:text-blue-300 font-medium mb-0.5">10:30</p>
             <p class="text-[11px] font-semibold truncate">Yusuf K.</p>
-            <p class="text-[9px] text-gray-400 truncate">Beard trim</p>
+            <p class="text-[9px] text-gray-400 truncate">Barba</p>
           </div>
         </div>
 
-        <!-- Row 12:00 -->
+        <!-- Fila 12:00 -->
         <div class="grid grid-cols-5 gap-1.5">
           <div class="rounded-lg border border-gray-100 dark:border-white/[.05] bg-gray-100 dark:bg-white/[.02] p-2 flex items-center justify-center">
             <span class="text-[10px] text-gray-300 dark:text-zinc-700">12:00</span>
@@ -334,641 +237,570 @@
           <div class="slot rounded-lg border border-teal-200 dark:border-teal-500/20 bg-teal-50 dark:bg-teal-500/[.1] p-2" data-ms="1290">
             <p class="text-[9px] text-teal-600 dark:text-teal-300 font-medium mb-0.5">12:00</p>
             <p class="text-[11px] font-semibold truncate">Luca F.</p>
-            <p class="text-[9px] text-gray-400 truncate">Full cut</p>
+            <p class="text-[9px] text-gray-400 truncate">Corte completo</p>
           </div>
           <div class="slot rounded-lg border border-red-200 dark:border-red-500/25 bg-red-50 dark:bg-red-500/[.13] p-2" data-ms="1600">
             <p class="text-[9px] text-red-500 dark:text-red-300 font-medium mb-0.5">12:00</p>
             <p class="text-[11px] font-semibold truncate">Rami A.</p>
-            <p class="text-[9px] text-gray-400 truncate">Haircut</p>
+            <p class="text-[9px] text-gray-400 truncate">Corte</p>
           </div>
           <div class="rounded-lg border border-gray-100 dark:border-white/[.05] bg-gray-100 dark:bg-white/[.02] p-2 flex items-center justify-center">
             <span class="text-[10px] text-gray-300 dark:text-zinc-700">12:00</span>
           </div>
         </div>
 
-        <!-- Stats footer -->
+        <!-- Stats -->
         <div class="mt-4 pt-4 border-t border-gray-100 dark:border-white/[.06] grid grid-cols-3 gap-2">
           <div class="text-center">
             <p class="text-[15px] font-bold">94<span class="text-red-500 text-xs font-semibold">%</span></p>
-            <p class="text-[9px] text-gray-400 dark:text-zinc-500 mt-0.5 uppercase tracking-wide">Slots filled</p>
+            <p class="text-[9px] text-gray-400 dark:text-zinc-500 mt-0.5 uppercase tracking-wide">Huecos llenos</p>
           </div>
           <div class="text-center border-x border-gray-100 dark:border-white/[.06]">
-            <p class="text-[15px] font-bold">0 <span class="text-green-500 text-[10px] font-semibold">no-shows</span></p>
-            <p class="text-[9px] text-gray-400 dark:text-zinc-500 mt-0.5 uppercase tracking-wide">This week</p>
+            <p class="text-[15px] font-bold">0 <span class="text-green-500 text-[10px] font-semibold">inasistencias</span></p>
+            <p class="text-[9px] text-gray-400 dark:text-zinc-500 mt-0.5 uppercase tracking-wide">Esta semana</p>
           </div>
           <div class="text-center">
             <p class="text-[15px] font-bold text-emerald-600 dark:text-emerald-400">+€840</p>
-            <p class="text-[9px] text-gray-400 dark:text-zinc-500 mt-0.5 uppercase tracking-wide">Extra revenue</p>
+            <p class="text-[9px] text-gray-400 dark:text-zinc-500 mt-0.5 uppercase tracking-wide">Ingresos extra</p>
           </div>
         </div>
       </div>
 
-      <!-- Floating: WhatsApp -->
-      <div class="fc absolute -bottom-5 -left-3 sm:-left-8 flex items-center gap-3 rounded-2xl
-                  border border-gray-100 dark:border-white/[.09]
-                  bg-white dark:bg-[#0e0e1a] px-4 py-3 shadow-xl"
-           data-fms="1900">
+      <!-- Flotante WhatsApp -->
+      <div class="fc absolute -bottom-20 -left-6 sm:-left-10 flex items-center gap-3 rounded-2xl border border-gray-100 dark:border-white/[.09] bg-white dark:bg-[#0e0e1a] px-4 py-3 shadow-xl" data-fms="1900">
         <div class="w-9 h-9 rounded-full bg-[#25D366] flex items-center justify-center flex-shrink-0">
           <svg width="17" height="17" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
         </div>
         <div>
-          <p class="text-[12px] font-semibold leading-tight">Booking confirmed ✓</p>
-          <p class="text-[10px] text-gray-400 dark:text-zinc-400 mt-0.5">Carlos → Wed 10:30 · Haircut</p>
+          <p class="text-[12px] font-semibold leading-tight">Reserva confirmada ✓</p>
+          <p class="text-[10px] text-gray-400 dark:text-zinc-400 mt-0.5">Carlos → Mié 10:30 · Corte</p>
         </div>
       </div>
 
-      <!-- Floating: Revenue -->
-      <div class="fc absolute -top-5 -right-3 sm:-right-8 rounded-2xl
-                  border border-gray-100 dark:border-white/[.09]
-                  bg-white dark:bg-[#0e0e1a] px-4 py-3 shadow-xl"
-           data-fms="2200">
-        <p class="text-[10px] text-gray-400 dark:text-zinc-500 mb-1 uppercase tracking-wide">Revenue · this week</p>
-        <p class="text-xl font-black text-emerald-600 dark:text-emerald-400">+€2,340</p>
+      <!-- Flotante Ingresos -->
+      <div class="fc absolute -top-5 -right-2 sm:-right-6 rounded-2xl border border-gray-100 dark:border-white/[.09] bg-white dark:bg-[#0e0e1a] px-4 py-3 shadow-xl" data-fms="2200">
+        <p class="text-[10px] text-gray-400 dark:text-zinc-500 mb-1 uppercase tracking-wide">Ingresos esta semana</p>
+        <p class="text-xl font-black text-emerald-600 dark:text-emerald-400">+€2.340</p>
         <div class="flex items-center gap-1 mt-1">
-          <svg width="11" height="11" fill="none" viewBox="0 0 11 11">
-            <path d="M1.5 8L4.5 4.5l2.5 2.5L10 2" stroke="#16a34a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">+23% vs last week</span>
+          <svg width="11" height="11" fill="none" viewBox="0 0 11 11"><path d="M1.5 8L4.5 4.5l2.5 2.5L10 2" stroke="#16a34a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">+23% vs semana pasada</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ░░░░░░░░░░░░░░░░ HOW IT WORKS ░░░░░░░░░░░░░░░░ -->
-<section id="how" class="relative z-10 py-24 bg-gray-50 dark:bg-[#0b0b14]">
+<!-- ════════════ CÓMO FUNCIONA ════════════ -->
+<section id="como" class="relative z-10 py-24 bg-gray-50 dark:bg-[#0b0b14]">
   <div class="max-w-5xl mx-auto px-5 sm:px-8 text-center">
-    <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">Simple by design</p>
-    <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">Three steps to a full calendar</h2>
-    <p class="text-gray-500 dark:text-zinc-400 mb-16 max-w-md mx-auto">Set up once. Everything else is automatic.</p>
+    <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">Diseñado para ser fácil</p>
+    <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">Tres pasos para un calendario lleno</h2>
+    <p class="text-gray-500 dark:text-zinc-400 mb-16 max-w-md mx-auto">Configúralo una vez. Todo lo demás es automático.</p>
 
-    <div class="grid md:grid-cols-3 gap-6">
-      <!-- Step 1 -->
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07]
-                  bg-white dark:bg-white/[.03] p-7 text-left">
-        <div class="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-500/[.12] border border-red-100 dark:border-red-500/20
-                    flex items-center justify-center mb-5">
-          <svg width="22" height="22" fill="none" viewBox="0 0 22 22">
-            <rect x="2" y="4" width="18" height="16" rx="2" stroke="#dc2626" stroke-width="1.6"/>
-            <path d="M7 2v4M15 2v4M2 9h18" stroke="#dc2626" stroke-width="1.6" stroke-linecap="round"/>
-            <circle cx="7.5" cy="13.5" r="1.5" fill="#dc2626"/>
-            <circle cx="11" cy="13.5" r="1.5" fill="#dc2626"/>
-          </svg>
+    <div class="grid md:grid-cols-3 gap-6 mb-20">
+      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-7 text-left">
+        <div class="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-500/[.12] border border-red-100 dark:border-red-500/20 flex items-center justify-center mb-5">
+          <svg width="22" height="22" fill="none" viewBox="0 0 22 22"><rect x="2" y="4" width="18" height="16" rx="2" stroke="#dc2626" stroke-width="1.6"/><path d="M7 2v4M15 2v4M2 9h18" stroke="#dc2626" stroke-width="1.6" stroke-linecap="round"/><circle cx="7.5" cy="13.5" r="1.5" fill="#dc2626"/><circle cx="11" cy="13.5" r="1.5" fill="#dc2626"/></svg>
         </div>
-        <div class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-2">Step 1</div>
-        <h3 class="text-base font-bold mb-2">Clients book online</h3>
-        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Share your personal booking link. Clients pick their slot 24/7, no calls needed.</p>
+        <div class="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-2">Paso 1</div>
+        <h3 class="text-base font-bold mb-2">Los clientes reservan online</h3>
+        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Comparte tu enlace. Los clientes eligen su hora 24/7, sin llamadas ni mensajes de WhatsApp de madrugada.</p>
       </div>
 
-      <!-- Step 2 -->
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07]
-                  bg-white dark:bg-white/[.03] p-7 text-left">
-        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/[.12] border border-blue-100 dark:border-blue-500/20
-                    flex items-center justify-center mb-5">
-          <svg width="22" height="22" fill="none" viewBox="0 0 22 22">
-            <path d="M19.5 11.5a8.5 8.5 0 01-8.5 8.5 8.5 8.5 0 01-4.5-1.3L2 20l1.3-4.5A8.5 8.5 0 112.5 11.5" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round"/>
-            <path d="M8 11.5h.01M11 11.5h.01M14 11.5h.01" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
-          </svg>
+      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-7 text-left">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/[.12] border border-blue-100 dark:border-blue-500/20 flex items-center justify-center mb-5">
+          <svg width="22" height="22" fill="none" viewBox="0 0 22 22"><path d="M19.5 11.5a8.5 8.5 0 01-8.5 8.5 8.5 8.5 0 01-4.5-1.3L2 20l1.3-4.5A8.5 8.5 0 112.5 11.5" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round"/><path d="M8 11.5h.01M11 11.5h.01M14 11.5h.01" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
-        <div class="text-[10px] font-bold uppercase tracking-widest text-blue-500 mb-2">Step 2</div>
-        <h3 class="text-base font-bold mb-2">WhatsApp reminders sent</h3>
-        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Automated reminders go out 24h and 2h before each appointment. No-shows disappear.</p>
+        <div class="text-[10px] font-bold uppercase tracking-widest text-blue-500 mb-2">Paso 2</div>
+        <h3 class="text-base font-bold mb-2">Recordatorios automáticos por WhatsApp</h3>
+        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Se envían solos 24h y 2h antes de cada cita. Las inasistencias desaparecen sin que toques nada.</p>
       </div>
 
-      <!-- Step 3 -->
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07]
-                  bg-white dark:bg-white/[.03] p-7 text-left">
-        <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-500/[.12] border border-emerald-100 dark:border-emerald-500/20
-                    flex items-center justify-center mb-5">
-          <svg width="22" height="22" fill="none" viewBox="0 0 22 22">
-            <path d="M11 2v20M2 7l9-5 9 5M2 15l9 5 9-5" stroke="#059669" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-7 text-left">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-500/[.12] border border-amber-100 dark:border-amber-500/20 flex items-center justify-center mb-5">
+          <svg width="22" height="22" fill="none" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" stroke="#d97706" stroke-width="1.6"/><path d="M11 7v4l3 2" stroke="#d97706" stroke-width="1.6" stroke-linecap="round"/></svg>
         </div>
-        <div class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 mb-2">Step 3</div>
-        <h3 class="text-base font-bold mb-2">Clients come back automatically</h3>
-        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Re-booking nudges bring clients back every 3–4 weeks. Retention on autopilot.</p>
+        <div class="text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-2">Paso 3</div>
+        <h3 class="text-base font-bold mb-2">Avisa de retrasos con un solo botón</h3>
+        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">¿Se te va el tiempo? Con un toque avisas a todos los clientes de hoy por WhatsApp. Ellos lo agradecen, tú evitas una mala reseña.</p>
+      </div>
+    </div>
+
+    <!-- FAQ visibles -->
+    <div class="text-left max-w-2xl mx-auto space-y-4">
+      <h3 class="text-2xl sm:text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-8 text-center">Preguntas frecuentes</h3>
+
+      <div class="rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
+        <p class="font-semibold text-sm mb-2">¿Es difícil de configurar?</p>
+        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">No. La configuración tarda menos de 10 minutos. Añades tus servicios, pones tu horario y compartes tu enlace. Sin conocimientos técnicos.</p>
+      </div>
+
+      <div class="rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
+        <p class="font-semibold text-sm mb-2">¿Funciona con WhatsApp?</p>
+        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Sí. Los mensajes de confirmación, recordatorio y aviso de retraso llegan al móvil del cliente como cualquier WhatsApp normal. Sin complicaciones.</p>
+      </div>
+
+      <div class="rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
+        <p class="font-semibold text-sm mb-2">¿Cuánto tarda en verse resultados?</p>
+        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">La mayoría de barberías reciben su primera reserva online en las primeras 24 horas. Las inasistencias bajan desde la primera semana de uso.</p>
+      </div>
+
+      <div class="rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
+        <p class="font-semibold text-sm mb-2">¿Puedo cancelar cuando quiera?</p>
+        <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Sí. Sin contratos ni permanencia. Cancelas cuando quieras desde tu panel con un clic.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ░░░░░░░░░░░░░░░░ DEMO ░░░░░░░░░░░░░░░░ -->
+<!-- ════════════ DEMO — CARRUSEL ════════════ -->
 <section id="demo" class="relative z-10 py-24 bg-[#f6f8ff] dark:bg-[#07070e]">
+  <div class="max-w-5xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-12">
+      <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">Demo interactiva</p>
+      <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">Pruébalo tú mismo</h2>
+      <p class="text-gray-500 dark:text-zinc-400 max-w-md mx-auto mb-2">Selecciona una función y pruébala tú mismo — así lo ven el barbero y el cliente.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex justify-center gap-2 mb-8 flex-wrap">
+      <button onclick="goSlide(0)" class="slide-tab px-4 py-2 rounded-full text-xs font-semibold border transition-colors" data-idx="0">📅 Nueva reserva</button>
+      <button onclick="goSlide(1)" class="slide-tab px-4 py-2 rounded-full text-xs font-semibold border transition-colors" data-idx="1">🔔 Recordatorio automático</button>
+      <button onclick="goSlide(2)" class="slide-tab px-4 py-2 rounded-full text-xs font-semibold border transition-colors" data-idx="2">⏰ Aviso de retraso</button>
+    </div>
+
+    <div class="relative">
+      <button onclick="prevSlide()" aria-label="Anterior"
+              class="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-[#0e0e1a]/70 backdrop-blur flex items-center justify-center text-gray-700 dark:text-white hover:bg-white dark:hover:bg-[#0e0e1a] transition-colors">
+        <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M10 3L5.5 8 10 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button onclick="nextSlide()" aria-label="Siguiente"
+              class="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-[#0e0e1a]/70 backdrop-blur flex items-center justify-center text-gray-700 dark:text-white hover:bg-white dark:hover:bg-[#0e0e1a] transition-colors">
+        <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M6 3l4.5 5L6 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="soft-shadow rounded-2xl border border-gray-100 dark:border-white/[.07] bg-gray-50 dark:bg-white/[.02] p-6 min-h-[420px]">
+
+      <!-- SLIDE 0: Nueva reserva -->
+      <div class="slide grid md:grid-cols-2 gap-6 items-center" id="slide-0">
+        <div class="rounded-xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.04] p-4">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-zinc-500">Panel del barbero</p>
+            <span class="flex items-center gap-1.5 text-[11px] text-green-600 dark:text-green-400 font-medium"><span class="pdot w-2 h-2 rounded-full bg-green-500 inline-block"></span>En vivo</span>
+          </div>
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 uppercase tracking-wide mb-3">Reservas de hoy</p>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between rounded-lg border border-gray-100 dark:border-white/[.06] bg-gray-50 dark:bg-white/[.02] px-3 py-2">
+              <div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-300 flex items-center justify-center text-[9px] font-bold">M</div><div><p class="text-[11px] font-semibold">Marco R.</p><p class="text-[9px] text-gray-400">Corte · 9:00</p></div></div>
+              <span class="text-[9px] px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 font-medium">Confirmado</span>
+            </div>
+            <div class="flex items-center justify-between rounded-lg border border-gray-100 dark:border-white/[.06] bg-gray-50 dark:bg-white/[.02] px-3 py-2">
+              <div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300 flex items-center justify-center text-[9px] font-bold">K</div><div><p class="text-[11px] font-semibold">Kevin D.</p><p class="text-[9px] text-gray-400">Barba · 9:00</p></div></div>
+              <span class="text-[9px] px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 font-medium">Confirmado</span>
+            </div>
+            <div id="new-booking-row" class="flex items-center justify-between rounded-lg border border-red-200 dark:border-red-500/30 bg-red-50 dark:bg-red-500/[.12] px-3 py-2 opacity-0 transition-all duration-500">
+              <div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-300 flex items-center justify-center text-[9px] font-bold">C</div><div><p class="text-[11px] font-semibold">Carlos B.</p><p class="text-[9px] text-gray-400">Corte · 10:30</p></div></div>
+              <span id="new-booking-badge" class="text-[9px] px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 font-medium">¡Nueva!</span>
+            </div>
+          </div>
+          <button id="confirm-cita-btn" onclick="confirmSlide0()" class="mt-3 w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-xl text-[12px] transition-colors">
+            <svg width="12" height="12" fill="none" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Confirmar cita de Carlos
+          </button>
+          <div id="confirm-cita-done" class="hidden mt-3 text-center">
+            <p class="text-[11px] text-green-600 dark:text-green-400 font-semibold check-in">✓ Confirmado — WhatsApp enviado al cliente</p>
+          </div>
+        </div>
+        <div class="flex flex-col items-center">
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-medium uppercase tracking-widest mb-3">Móvil del cliente</p>
+          <div class="bg-gray-900 rounded-[2rem] p-1.5 shadow-2xl w-[200px]">
+            <div class="bg-white dark:bg-[#0f1117] rounded-[1.6rem] overflow-hidden h-[340px] p-3">
+              <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100 dark:border-white/[.06]">
+                <div class="w-7 h-7 rounded-full bg-[#25D366] flex items-center justify-center"><svg width="13" height="13" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
+                <div><p class="text-[10px] font-bold text-gray-900 dark:text-white">Barbería Aiblop</p><p class="text-[8px] text-gray-400">en línea</p></div>
+              </div>
+              <div id="slide0-msg" class="opacity-0 transition-opacity duration-500 flex justify-end">
+                <div class="max-w-[90%] rounded-xl rounded-tr-sm bg-[#dcf8c6] dark:bg-[#1a3a24] px-2.5 py-2">
+                  <p class="text-[10px] text-gray-800 dark:text-green-100 leading-relaxed">✅ ¡Hola Carlos! Tu cita está confirmada para <strong>mañana a las 10:30</strong>. ¡Te esperamos!</p>
+                  <p class="text-[8px] text-gray-400 mt-1 text-right">ahora ✓✓</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 1: Recordatorio -->
+      <div class="slide grid md:grid-cols-2 gap-6 items-center" id="slide-1">
+        <div class="rounded-xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.04] p-4">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-zinc-500">Panel del barbero</p>
+            <span class="flex items-center gap-1.5 text-[11px] text-green-600 dark:text-green-400 font-medium"><span class="pdot w-2 h-2 rounded-full bg-green-500 inline-block"></span>En vivo</span>
+          </div>
+          <div class="rounded-lg border border-blue-100 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/[.08] p-3.5">
+            <div class="flex items-center gap-2 mb-2"><svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M8 1.5C4.4 1.5 1.5 4.4 1.5 8S4.4 14.5 8 14.5 14.5 11.6 14.5 8 11.6 1.5 8 1.5zm0 3V8l3 2" stroke="#2563eb" stroke-width="1.3" stroke-linecap="round"/></svg><p class="text-[11px] font-semibold text-blue-700 dark:text-blue-300">Recordatorios de hoy</p></div>
+            <p class="text-[10px] text-blue-600 dark:text-blue-400 mb-2">Se enviarán automáticamente:</p>
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between text-[10px]"><span class="text-gray-600 dark:text-zinc-300">Marco R. — 9:00</span><span class="text-blue-600 dark:text-blue-400 font-medium">📱 Enviado ✓</span></div>
+              <div class="flex items-center justify-between text-[10px]"><span class="text-gray-600 dark:text-zinc-300">Carlos B. — 10:30</span><span class="text-blue-600 dark:text-blue-400 font-medium">📱 Enviado ✓</span></div>
+              <div class="flex items-center justify-between text-[10px]"><span class="text-gray-600 dark:text-zinc-300">Luca F. — 12:00</span><span class="text-amber-600 dark:text-amber-400 font-medium">⏳ Pendiente</span></div>
+            </div>
+          </div>
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 mt-3 text-center">Tú no haces nada. El sistema lo gestiona solo.</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-medium uppercase tracking-widest mb-3">Móvil del cliente</p>
+          <div class="bg-gray-900 rounded-[2rem] p-1.5 shadow-2xl w-[200px]">
+            <div class="bg-white dark:bg-[#0f1117] rounded-[1.6rem] overflow-hidden h-[340px] p-3">
+              <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100 dark:border-white/[.06]">
+                <div class="w-7 h-7 rounded-full bg-[#25D366] flex items-center justify-center"><svg width="13" height="13" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
+                <div><p class="text-[10px] font-bold text-gray-900 dark:text-white">Barbería Aiblop</p><p class="text-[8px] text-gray-400">en línea</p></div>
+              </div>
+              <div class="flex justify-end mb-2"><div class="max-w-[90%] rounded-xl rounded-tr-sm bg-[#dcf8c6] dark:bg-[#1a3a24] px-2.5 py-2"><p class="text-[10px] text-gray-800 dark:text-green-100">✅ Cita confirmada para mañana a las 10:30</p><p class="text-[8px] text-gray-400 mt-1 text-right">ayer ✓✓</p></div></div>
+              <div class="flex justify-end"><div class="max-w-[90%] rounded-xl rounded-tr-sm bg-[#dcf8c6] dark:bg-[#1a3a24] px-2.5 py-2"><p class="text-[10px] text-gray-800 dark:text-green-100">⏰ <strong>Recordatorio:</strong> Tu cita es <strong>hoy a las 10:30</strong>. ¡Te esperamos en Calle Mayor 12!</p><p class="text-[8px] text-gray-400 mt-1 text-right">08:30 ✓✓</p></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: Aviso de retraso -->
+      <div class="slide grid md:grid-cols-2 gap-6 items-center" id="slide-2">
+        <div class="rounded-xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.04] p-4">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-zinc-500">Panel del barbero</p>
+            <span class="flex items-center gap-1.5 text-[11px] text-green-600 dark:text-green-400 font-medium"><span class="pdot w-2 h-2 rounded-full bg-green-500 inline-block"></span>En vivo</span>
+          </div>
+          <div class="rounded-xl border border-amber-200 dark:border-amber-500/25 bg-amber-50 dark:bg-amber-500/[.08] p-4">
+            <div class="flex items-center gap-2 mb-3"><span class="text-lg">⚠️</span><p class="text-[12px] font-bold text-amber-800 dark:text-amber-300">Avisar de posible retraso a los clientes de hoy</p></div>
+            <p class="text-[10px] text-amber-700 dark:text-amber-400 mb-3">Se enviará un WhatsApp a los <strong>5 clientes</strong> pendientes de hoy.</p>
+            <p class="text-[10px] text-gray-600 dark:text-zinc-400 mb-2 font-medium">¿Cuántos minutos de retraso?</p>
+            <div class="flex gap-2 mb-3 flex-wrap">
+              <button class="delay-btn px-3 py-1.5 rounded-lg border text-[11px] font-semibold border-gray-200 dark:border-white/10 bg-white dark:bg-white/[.05] text-gray-600 dark:text-zinc-300 hover:border-amber-400 hover:text-amber-600 transition-colors" onclick="selectDelay(this,5)">5 min</button>
+              <button class="delay-btn px-3 py-1.5 rounded-lg border text-[11px] font-semibold border-amber-500 bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300" onclick="selectDelay(this,10)">10 min</button>
+              <button class="delay-btn px-3 py-1.5 rounded-lg border text-[11px] font-semibold border-gray-200 dark:border-white/10 bg-white dark:bg-white/[.05] text-gray-600 dark:text-zinc-300 hover:border-amber-400 hover:text-amber-600 transition-colors" onclick="selectDelay(this,15)">15 min</button>
+              <button class="delay-btn px-3 py-1.5 rounded-lg border text-[11px] font-semibold border-gray-200 dark:border-white/10 bg-white dark:bg-white/[.05] text-gray-600 dark:text-zinc-300 hover:border-amber-400 hover:text-amber-600 transition-colors" onclick="selectDelay(this,20)">20 min</button>
+            </div>
+            <button id="send-delay-btn" onclick="sendDelay()" class="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold py-2.5 rounded-xl text-[12px] transition-colors">
+              <svg width="13" height="13" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              Enviar aviso por WhatsApp
+            </button>
+            <div id="delay-sent" class="hidden mt-3 text-center">
+              <p class="text-[11px] text-green-600 dark:text-green-400 font-semibold check-in">✓ ¡Enviado a 5 clientes!</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col items-center">
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-medium uppercase tracking-widest mb-3">Móvil del cliente</p>
+          <div class="bg-gray-900 rounded-[2rem] p-1.5 shadow-2xl w-[200px]">
+            <div class="bg-white dark:bg-[#0f1117] rounded-[1.6rem] overflow-hidden h-[340px] p-3">
+              <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100 dark:border-white/[.06]">
+                <div class="w-7 h-7 rounded-full bg-[#25D366] flex items-center justify-center"><svg width="13" height="13" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
+                <div><p class="text-[10px] font-bold text-gray-900 dark:text-white">Barbería Aiblop</p><p class="text-[8px] text-gray-400">en línea</p></div>
+              </div>
+              <div class="flex justify-end mb-2"><div class="max-w-[90%] rounded-xl rounded-tr-sm bg-[#dcf8c6] dark:bg-[#1a3a24] px-2.5 py-2"><p class="text-[10px] text-gray-800 dark:text-green-100">⏰ Recordatorio: Tu cita es hoy a las 10:30</p><p class="text-[8px] text-gray-400 mt-1 text-right">08:30 ✓✓</p></div></div>
+              <div id="delay-phone-msg" class="flex justify-end opacity-0 transition-opacity duration-500">
+                <div class="max-w-[90%] rounded-xl rounded-tr-sm bg-[#dcf8c6] dark:bg-[#1a3a24] px-2.5 py-2">
+                  <p class="text-[10px] text-gray-800 dark:text-green-100">⚠️ Hola Carlos, es posible que tu cita de las <strong>10:30</strong> se retrase unos <strong id="delay-min-phone">10</strong> minutos. ¡Gracias por tu paciencia!</p>
+                  <p class="text-[8px] text-gray-400 mt-1 text-right">ahora ✓✓</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <!-- Dots -->
+    <div class="flex justify-center gap-2 mt-5">
+      <button onclick="goSlide(0)" class="slide-dot w-2 h-2 rounded-full transition-all" data-idx="0"></button>
+      <button onclick="goSlide(1)" class="slide-dot w-2 h-2 rounded-full transition-all" data-idx="1"></button>
+      <button onclick="goSlide(2)" class="slide-dot w-2 h-2 rounded-full transition-all" data-idx="2"></button>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ QUE NO TE PASE A TI ════════════ -->
+<section class="relative z-10 py-24 bg-gray-50 dark:bg-[#0b0b14]">
   <div class="max-w-6xl mx-auto px-5 sm:px-8">
     <div class="text-center mb-14">
-      <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3" data-en="Live demo" data-es="Demo en vivo">Live demo</p>
-      <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4" data-en="Watch it work in real time" data-es="Míralo funcionar en tiempo real">Watch it work in real time</h2>
-      <p class="text-gray-500 dark:text-zinc-400 max-w-sm mx-auto" data-en="A client books online. You get notified. They get a reminder. You get paid." data-es="Un cliente reserva online. Tú recibes aviso. Él recibe recordatorio. Tú cobras.">A client books online. You get notified. They get a reminder. You get paid.</p>
+      <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">Que no te pase a ti</p>
+      <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">Reseñas negativas reales</h2>
+      <p class="text-gray-500 dark:text-zinc-400 max-w-xl mx-auto">Estos son algunos comentarios reales de clientes que ya no tienen más los negocios que usan aiblop.</p>
     </div>
 
-    <div class="grid lg:grid-cols-[1.2fr_1fr] gap-6 items-start">
-
-      <!-- Dashboard card -->
-      <div class="soft-shadow rounded-2xl border border-gray-100 dark:border-white/[.07]
-                  bg-gray-50 dark:bg-white/[.02] p-5">
-        <!-- Dashboard header -->
-        <div class="flex items-center justify-between mb-5">
-          <div class="flex items-center gap-2">
-            <div class="w-5 h-5 rounded bg-red-600 flex items-center justify-center">
-              <svg width="10" height="10" fill="white" viewBox="0 0 10 10"><path d="M5 1l4 2.3v4.4L5 10 1 7.7V3.3L5 1z"/></svg>
-            </div>
-            <span class="text-sm font-bold">aiblop dashboard</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="pdot w-2 h-2 rounded-full bg-green-500 inline-block"></span>
-            <span class="text-[11px] text-gray-400 dark:text-zinc-400" data-en="Live" data-es="En vivo">Live</span>
-          </div>
-        </div>
-
-        <!-- Stat row -->
-        <div class="grid grid-cols-3 gap-3 mb-5">
-          <div class="rounded-xl border border-gray-100 dark:border-white/[.06] bg-white dark:bg-white/[.03] p-3">
-            <p class="text-[10px] text-gray-400 dark:text-zinc-500 uppercase tracking-wide mb-1" data-en="Today" data-es="Hoy">Today</p>
-            <p class="text-xl font-black" id="today-count">8</p>
-            <p class="text-[10px] text-gray-400" data-en="bookings" data-es="reservas">bookings</p>
-          </div>
-          <div class="rounded-xl border border-gray-100 dark:border-white/[.06] bg-white dark:bg-white/[.03] p-3">
-            <p class="text-[10px] text-gray-400 dark:text-zinc-500 uppercase tracking-wide mb-1" data-en="No-shows" data-es="No-shows">No-shows</p>
-            <p class="text-xl font-black text-green-600 dark:text-green-400">0</p>
-            <p class="text-[10px] text-gray-400" data-en="this week" data-es="esta semana">this week</p>
-          </div>
-          <div class="rounded-xl border border-gray-100 dark:border-white/[.06] bg-white dark:bg-white/[.03] p-3">
-            <p class="text-[10px] text-gray-400 dark:text-zinc-500 uppercase tracking-wide mb-1" data-en="Revenue" data-es="Ingresos">Revenue</p>
-            <p class="text-xl font-black text-emerald-600 dark:text-emerald-400">€<span id="rev">384</span></p>
-            <p class="text-[10px] text-gray-400" data-en="today" data-es="hoy">today</p>
-          </div>
-        </div>
-
-        <!-- Booking list -->
-        <div class="space-y-2">
-          <p class="text-[10px] font-semibold uppercase tracking-widest text-gray-400 dark:text-zinc-500 mb-3" data-en="Recent bookings" data-es="Reservas recientes">Recent bookings</p>
-          <div id="booking-list" class="space-y-2"></div>
-        </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+      <div class="lift rounded-2xl border border-gray-200 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-4">
+        <div class="flex items-center gap-2 mb-3"><div class="flex gap-0.5"><span class="text-red-500 text-sm">★</span><span class="text-gray-200 dark:text-zinc-700 text-sm">★★★★</span></div><span class="text-[10px] text-gray-400 ml-auto">Google · hace 3 sem.</span></div>
+        <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-3">"Media hora de retraso y ni se molestaron en avisarme. Podría haberlo gestionado si me lo hubieran dicho. No vuelvo."</p>
+        <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-bold text-gray-500 dark:text-zinc-300">J</div><p class="text-[11px] font-semibold text-gray-500 dark:text-zinc-400">Javier M.</p></div>
       </div>
 
-      <!-- WhatsApp mockup -->
-      <div class="soft-shadow rounded-2xl border border-gray-100 dark:border-white/[.07]
-                  bg-gray-50 dark:bg-white/[.02] p-5">
-        <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100 dark:border-white/[.06]">
-          <div class="w-9 h-9 rounded-full bg-[#25D366] flex items-center justify-center">
-            <svg width="17" height="17" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-          </div>
-          <div>
-            <p class="text-sm font-semibold">WhatsApp Business</p>
-            <p class="text-[11px] text-gray-400 dark:text-zinc-400" data-en="Automated reminders" data-es="Recordatorios automáticos">Automated reminders</p>
-          </div>
-        </div>
-
-        <!-- Chat messages -->
-        <div class="space-y-3" id="chat-msgs">
-          <!-- Outgoing -->
-          <div class="flex justify-end">
-            <div class="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#dcf8c6] dark:bg-[#1a3a24] px-3.5 py-2.5">
-              <p class="text-[12px] text-gray-800 dark:text-green-100 leading-relaxed">
-                <span data-en-html="👋 Hi Marco! Your haircut with <strong>The Barber Studio</strong> is confirmed for <strong>tomorrow at 9:00 AM</strong>. See you then!"
-                      data-es-html="👋 ¡Hola Marco! Tu corte con <strong>The Barber Studio</strong> está confirmado para <strong>mañana a las 9:00</strong>. ¡Nos vemos!">
-                  👋 Hi Marco! Your haircut with <strong>The Barber Studio</strong> is confirmed for <strong>tomorrow at 9:00 AM</strong>. See you then!
-                </span>
-              </p>
-              <p class="text-[9px] text-gray-400 dark:text-green-400 mt-1 text-right">09:00 ✓✓</p>
-            </div>
-          </div>
-
-          <!-- Incoming -->
-          <div class="flex justify-start">
-            <div class="max-w-[75%] rounded-2xl rounded-tl-sm bg-white dark:bg-white/[.07]
-                        border border-gray-100 dark:border-white/[.05] px-3.5 py-2.5">
-              <p class="text-[12px] text-gray-800 dark:text-white">Perfect, thanks! 👍</p>
-              <p class="text-[9px] text-gray-400 mt-1">09:02</p>
-            </div>
-          </div>
-
-          <!-- Reminder -->
-          <div class="flex justify-end">
-            <div class="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#dcf8c6] dark:bg-[#1a3a24] px-3.5 py-2.5">
-              <p class="text-[12px] text-gray-800 dark:text-green-100 leading-relaxed">
-                <span data-en-html="⏰ <strong>Reminder:</strong> Your appointment is in <strong>2 hours</strong>. We're at Calle Mayor 12. Any questions? Reply here!"
-                      data-es-html="⏰ <strong>Recordatorio:</strong> Tu cita es en <strong>2 horas</strong>. Estamos en Calle Mayor 12. ¿Dudas? Responde aquí.">
-                  ⏰ <strong>Reminder:</strong> Your appointment is in <strong>2 hours</strong>. We're at Calle Mayor 12. Any questions? Reply here!
-                </span>
-              </p>
-              <p class="text-[9px] text-gray-400 dark:text-green-400 mt-1 text-right">07:00 ✓✓</p>
-            </div>
-          </div>
-
-          <!-- Re-booking nudge -->
-          <div id="rebooking-msg" class="flex justify-end opacity-0 transition-opacity duration-500">
-            <div class="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#dcf8c6] dark:bg-[#1a3a24] px-3.5 py-2.5">
-              <p class="text-[12px] text-gray-800 dark:text-green-100 leading-relaxed">
-                <span data-en-html="✂️ It's been 3 weeks Marco! Ready for another haircut? <strong>Book your slot:</strong> aiblop.com/barber"
-                      data-es-html="✂️ ¡Han pasado 3 semanas, Marco! ¿Listo para otro corte? <strong>Reserva tu hueco:</strong> aiblop.com/barber">
-                  ✂️ It's been 3 weeks Marco! Ready for another haircut? <strong>Book your slot:</strong> aiblop.com/barber
-                </span>
-              </p>
-              <p class="text-[9px] text-gray-400 dark:text-green-400 mt-1 text-right">10:00 ✓✓</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sending indicator -->
-        <div id="typing-indicator" class="flex justify-end mt-3 opacity-0 transition-opacity duration-300">
-          <div class="flex items-center gap-1 bg-[#dcf8c6] dark:bg-[#1a3a24] rounded-full px-3 py-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-green-600 dark:bg-green-400 pdot inline-block"></span>
-            <span class="w-1.5 h-1.5 rounded-full bg-green-600 dark:bg-green-400 pdot inline-block" style="animation-delay:.2s"></span>
-            <span class="w-1.5 h-1.5 rounded-full bg-green-600 dark:bg-green-400 pdot inline-block" style="animation-delay:.4s"></span>
-          </div>
-        </div>
+      <div class="lift rounded-2xl border border-gray-200 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-4">
+        <div class="flex items-center gap-2 mb-3"><div class="flex gap-0.5"><span class="text-red-500 text-sm">★★</span><span class="text-gray-200 dark:text-zinc-700 text-sm">★★★</span></div><span class="text-[10px] text-gray-400 ml-auto">Google · hace 1 mes</span></div>
+        <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-3">"Llegué a la hora acordada y estaban terminando al cliente anterior. Esperé 25 minutos de pie. Un poco de respeto."</p>
+        <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-bold text-gray-500 dark:text-zinc-300">A</div><p class="text-[11px] font-semibold text-gray-500 dark:text-zinc-400">Andrés P.</p></div>
       </div>
+
+      <div class="lift rounded-2xl border border-gray-200 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-4">
+        <div class="flex items-center gap-2 mb-3"><div class="flex gap-0.5"><span class="text-red-500 text-sm">★</span><span class="text-gray-200 dark:text-zinc-700 text-sm">★★★★</span></div><span class="text-[10px] text-gray-400 ml-auto">Google · hace 2 sem.</span></div>
+        <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-3">"Pedí cita por WhatsApp, me dijeron que sí, y cuando llegué no tenían ningún registro. Desorganización total."</p>
+        <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-bold text-gray-500 dark:text-zinc-300">R</div><p class="text-[11px] font-semibold text-gray-500 dark:text-zinc-400">Roberto G.</p></div>
+      </div>
+
+      <div class="lift rounded-2xl border border-gray-200 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-4">
+        <div class="flex items-center gap-2 mb-3"><div class="flex gap-0.5"><span class="text-red-500 text-sm">★★</span><span class="text-gray-200 dark:text-zinc-700 text-sm">★★★</span></div><span class="text-[10px] text-gray-400 ml-auto">Google · hace 5 días</span></div>
+        <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-3">"Me cancelaron sin avisarme. Me enteré cuando ya había llegado. Perdí el tiempo y tuve que irme sin corte."</p>
+        <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-bold text-gray-500 dark:text-zinc-300">M</div><p class="text-[11px] font-semibold text-gray-500 dark:text-zinc-400">Miguel C.</p></div>
+      </div>
+
+      <div class="lift rounded-2xl border border-gray-200 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-4">
+        <div class="flex items-center gap-2 mb-3"><div class="flex gap-0.5"><span class="text-red-500 text-sm">★</span><span class="text-gray-200 dark:text-zinc-700 text-sm">★★★★</span></div><span class="text-[10px] text-gray-400 ml-auto">Google · hace 2 meses</span></div>
+        <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-3">"Tres veces seguidas he tenido que recordarles yo mi propia cita. Si no los llamo, se olvidan. Ya busco otro sitio."</p>
+        <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-bold text-gray-500 dark:text-zinc-300">D</div><p class="text-[11px] font-semibold text-gray-500 dark:text-zinc-400">Diego L.</p></div>
+      </div>
+
+      <div class="lift rounded-2xl border border-gray-200 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-4">
+        <div class="flex items-center gap-2 mb-3"><div class="flex gap-0.5"><span class="text-red-500 text-sm">★★</span><span class="text-gray-200 dark:text-zinc-700 text-sm">★★★</span></div><span class="text-[10px] text-gray-400 ml-auto">Google · hace 1 sem.</span></div>
+        <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-3">"El barbero ni se acordaba de que tenía cita a esa hora. Me hicieron esperar 40 minutos. Poca seriedad."</p>
+        <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-bold text-gray-500 dark:text-zinc-300">F</div><p class="text-[11px] font-semibold text-gray-500 dark:text-zinc-400">Fernando B.</p></div>
+      </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto text-center rounded-2xl border border-red-100 dark:border-red-500/20 bg-red-50 dark:bg-red-500/[.06] p-6">
+      <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed">
+        Con nuestro sistema reduces la probabilidad de que te pase esto porque
+        <strong class="text-gray-900 dark:text-white">tus clientes se sienten partícipes de lo que ocurre</strong> —
+        reciben avisos, confirmaciones y recordatorios automáticos en todo momento.
+      </p>
     </div>
   </div>
 </section>
 
-<!-- ░░░░░░░░░░░░░░░░ SOCIAL PROOF ░░░░░░░░░░░░░░░░ -->
-<section class="relative z-10 py-20 bg-gray-50 dark:bg-[#0b0b14]">
-  <div class="max-w-5xl mx-auto px-5 sm:px-8 text-center">
-    <!-- Avatars + count -->
-    <div class="flex items-center justify-center gap-3 mb-6">
-      <div class="flex -space-x-3">
-        <div class="w-10 h-10 rounded-full border-2 border-white dark:border-[#0b0b14] bg-gradient-to-br from-red-400 to-rose-600 flex items-center justify-center text-xs font-bold text-white">M</div>
-        <div class="w-10 h-10 rounded-full border-2 border-white dark:border-[#0b0b14] bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-xs font-bold text-white">K</div>
-        <div class="w-10 h-10 rounded-full border-2 border-white dark:border-[#0b0b14] bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-xs font-bold text-white">J</div>
-        <div class="w-10 h-10 rounded-full border-2 border-white dark:border-[#0b0b14] bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-xs font-bold text-white">A</div>
-        <div class="w-10 h-10 rounded-full border-2 border-white dark:border-[#0b0b14] bg-gradient-to-br from-purple-400 to-violet-600 flex items-center justify-center text-xs font-bold text-white">R</div>
-        <div class="w-10 h-10 rounded-full border-2 border-white dark:border-[#0b0b14] bg-gray-200 dark:bg-zinc-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-zinc-300">+</div>
-      </div>
-      <div class="text-left">
-        <div class="flex gap-0.5 mb-0.5">
-          <span class="text-yellow-400 text-sm">★★★★★</span>
-        </div>
-        <p class="text-[12px] text-gray-500 dark:text-zinc-400">from <span class="font-semibold text-gray-900 dark:text-white">500+</span> barbershops</p>
-      </div>
-    </div>
-
-    <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">
-      The numbers speak for themselves
-    </h2>
-    <p class="text-gray-500 dark:text-zinc-400 mb-14 max-w-sm mx-auto">Real results from real barbershops using aiblop every day.</p>
-
-    <!-- Stats grid -->
-    <div class="grid sm:grid-cols-3 gap-6 mb-16">
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-6">
-        <p class="text-4xl font-black text-red-600 dark:text-red-400 mb-1">2,847</p>
-        <p class="text-sm text-gray-500 dark:text-zinc-400">Bookings filled this week</p>
-      </div>
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-6">
-        <p class="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-1">80%</p>
-        <p class="text-sm text-gray-500 dark:text-zinc-400">Reduction in no-shows</p>
-      </div>
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-6">
-        <p class="text-4xl font-black text-blue-600 dark:text-blue-400 mb-1">+€620</p>
-        <p class="text-sm text-gray-500 dark:text-zinc-400">Average extra revenue/month</p>
-      </div>
-    </div>
-
-    <!-- Testimonials -->
-    <div class="grid md:grid-cols-3 gap-5">
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5 text-left">
-        <div class="flex gap-0.5 mb-3"><span class="text-yellow-400 text-sm">★★★★★</span></div>
-        <p class="text-sm text-gray-600 dark:text-zinc-300 leading-relaxed mb-4">"I went from 60% capacity to 95% in two weeks. The WhatsApp reminders alone saved me €400/month in no-shows."</p>
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-red-400 to-rose-600 flex items-center justify-center text-[11px] font-bold text-white">M</div>
-          <div>
-            <p class="text-[12px] font-semibold">Marco Ricci</p>
-            <p class="text-[10px] text-gray-400">The Barber Studio, Milan</p>
-          </div>
-        </div>
-      </div>
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5 text-left">
-        <div class="flex gap-0.5 mb-3"><span class="text-yellow-400 text-sm">★★★★★</span></div>
-        <p class="text-sm text-gray-600 dark:text-zinc-300 leading-relaxed mb-4">"Setup took 10 minutes. My clients love the online booking. I stopped answering DMs at midnight."</p>
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-[11px] font-bold text-white">K</div>
-          <div>
-            <p class="text-[12px] font-semibold">Karim Benali</p>
-            <p class="text-[10px] text-gray-400">KBcuts, Paris</p>
-          </div>
-        </div>
-      </div>
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5 text-left">
-        <div class="flex gap-0.5 mb-3"><span class="text-yellow-400 text-sm">★★★★★</span></div>
-        <p class="text-sm text-gray-600 dark:text-zinc-300 leading-relaxed mb-4">"Revenue is up 30%. The re-booking reminders bring clients back before I even think of them."</p>
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-[11px] font-bold text-white">J</div>
-          <div>
-            <p class="text-[12px] font-semibold">Javier Torres</p>
-            <p class="text-[10px] text-gray-400">BarberKing, Madrid</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ░░░░░░░░░░░░░░░░ PRICING ░░░░░░░░░░░░░░░░ -->
-<section id="pricing" class="relative z-10 py-24 bg-[#f6f8ff] dark:bg-[#07070e]">
+<!-- ════════════ PRECIO ════════════ -->
+<section id="precio" class="relative z-10 py-24 bg-[#f6f8ff] dark:bg-[#07070e]">
   <div class="max-w-lg mx-auto px-5 sm:px-8 text-center">
-    <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3" data-en="Pricing" data-es="Precios">Pricing</p>
-    <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4" data-en="One plan. Everything included." data-es="Un plan. Todo incluido.">One plan. Everything included.</h2>
-    <p class="text-gray-500 dark:text-zinc-400 mb-12 max-w-sm mx-auto" data-en="No hidden fees. No complex tiers. Just results." data-es="Sin cargos ocultos. Sin planes complejos. Solo resultados.">No hidden fees. No complex tiers. Just results.</p>
+    <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">Precio</p>
+    <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">Un plan. Todo incluido.</h2>
+    <p class="text-gray-500 dark:text-zinc-400 mb-12 max-w-sm mx-auto">Sin sorpresas, sin letra pequeña.</p>
 
-    <div class="price-shadow rounded-2xl border-2 border-red-600/50 bg-gray-50 dark:bg-white/[.03] p-8 relative overflow-hidden shadow-xl">
-      <!-- Popular tag -->
+    <div class="rounded-2xl border-2 border-red-600/50 bg-gray-50 dark:bg-white/[.03] p-8 relative text-left"
+         style="box-shadow:0 0 0 1px rgba(220,38,38,.12),0 30px 80px rgba(220,38,38,.06)">
       <div class="absolute top-5 right-5">
-        <span class="bg-red-600 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full" data-en="Most popular" data-es="Más popular">Most popular</span>
+        <span class="bg-red-600 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">Más popular</span>
       </div>
 
-      <p class="text-sm font-semibold text-gray-500 dark:text-zinc-400 mb-1" data-en="Pro Plan" data-es="Plan Pro">Pro Plan</p>
-      <div class="flex items-baseline justify-center gap-1 mb-1">
+      <p class="text-sm font-semibold text-gray-500 dark:text-zinc-400 mb-2">Plan Pro</p>
+      <div class="flex items-baseline gap-3 mb-1">
+        <span class="text-2xl font-bold text-gray-300 dark:text-zinc-600 line-through">€120</span>
         <span class="text-5xl font-black">€49</span>
-        <span class="text-gray-400" data-en="/month" data-es="/mes">/month</span>
+        <span class="text-gray-400">/mes</span>
       </div>
-      <p class="text-[13px] text-gray-400 dark:text-zinc-500 mb-8" data-en="14-day free trial · Cancel anytime" data-es="Prueba gratis 14 días · Cancela cuando quieras">14-day free trial · Cancel anytime</p>
+      <p class="text-[13px] text-gray-400 dark:text-zinc-500 mb-8">Sin permanencia · Cancela cuando quieras</p>
 
-      <ul class="space-y-3 text-sm text-left mb-8">
-        <li class="flex items-center gap-3">
-          <svg class="flex-shrink-0 text-green-500" width="16" height="16" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#22c55e" fill-opacity=".15"/><path d="M5 8l2.5 2.5L11 5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span data-en="Unlimited online bookings" data-es="Reservas online ilimitadas">Unlimited online bookings</span>
-        </li>
-        <li class="flex items-center gap-3">
-          <svg class="flex-shrink-0 text-green-500" width="16" height="16" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#22c55e" fill-opacity=".15"/><path d="M5 8l2.5 2.5L11 5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span data-en="Automated WhatsApp reminders" data-es="Recordatorios automáticos por WhatsApp">Automated WhatsApp reminders</span>
-        </li>
-        <li class="flex items-center gap-3">
-          <svg class="flex-shrink-0 text-green-500" width="16" height="16" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#22c55e" fill-opacity=".15"/><path d="M5 8l2.5 2.5L11 5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span data-en="Re-booking nudges to retain clients" data-es="Re-booking automático para retener clientes">Re-booking nudges to retain clients</span>
-        </li>
-        <li class="flex items-center gap-3">
-          <svg class="flex-shrink-0 text-green-500" width="16" height="16" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#22c55e" fill-opacity=".15"/><path d="M5 8l2.5 2.5L11 5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span data-en="Analytics dashboard" data-es="Panel de analítica">Analytics dashboard</span>
-        </li>
-        <li class="flex items-center gap-3">
-          <svg class="flex-shrink-0 text-green-500" width="16" height="16" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#22c55e" fill-opacity=".15"/><path d="M5 8l2.5 2.5L11 5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span data-en="Custom booking page with your branding" data-es="Página de reservas con tu marca">Custom booking page with your branding</span>
-        </li>
-        <li class="flex items-center gap-3">
-          <svg class="flex-shrink-0 text-green-500" width="16" height="16" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#22c55e" fill-opacity=".15"/><path d="M5 8l2.5 2.5L11 5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span data-en="Setup support included" data-es="Soporte de configuración incluido">Setup support included</span>
-        </li>
-      </ul>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start gap-3">
+          <div class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M2 5l2.5 2.5L8 2.5" stroke="#dc2626" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed"><strong class="text-gray-900 dark:text-white">Reservas ilimitadas durante todo el mes</strong> — los clientes que entren no tienen límite.</p>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M2 5l2.5 2.5L8 2.5" stroke="#dc2626" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed"><strong class="text-gray-900 dark:text-white">Recordatorios por WhatsApp ilimitados</strong> — sin costes adicionales ni sorpresas.</p>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M2 5l2.5 2.5L8 2.5" stroke="#dc2626" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed"><strong class="text-gray-900 dark:text-white">Organiza tus citas automáticamente</strong> — los clientes reservan solos, tú te enteras al momento.</p>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M2 5l2.5 2.5L8 2.5" stroke="#dc2626" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed"><strong class="text-gray-900 dark:text-white">Un panel muy sencillo</strong> — verás todo de un vistazo: agenda, clientes y mensajes enviados.</p>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M2 5l2.5 2.5L8 2.5" stroke="#dc2626" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed"><strong class="text-gray-900 dark:text-white">Tú solo preocúpate de atender a tus clientes</strong> — nosotros gestionamos el calendario por ti.</p>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M2 5l2.5 2.5L8 2.5" stroke="#dc2626" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p class="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed"><strong class="text-gray-900 dark:text-white">Soporte nuestro en cualquier momento</strong> — si tienes alguna duda, estamos aquí.</p>
+        </div>
+      </div>
 
-      <a href="#"
-         class="cta-p block w-full text-center bg-red-600 hover:bg-red-700 text-white
-                font-bold py-4 rounded-xl text-sm transition-colors">
-        <span data-en="Start your free trial →" data-es="Empieza tu prueba gratis →">Start your free trial →</span>
+      <a href="#" class="cta-p block w-full text-center bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl text-sm transition-colors mb-4">
+        Empezar ahora →
       </a>
-      <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-3" data-en="No credit card required to start." data-es="No se requiere tarjeta para empezar.">No credit card required to start.</p>
+      <p class="text-[12px] text-gray-500 dark:text-zinc-500 leading-relaxed text-center">
+        Pruébalo y verás cómo aumenta la satisfacción de tus clientes. Estamos tan seguros de que te ayudará, que si no es así <strong class="text-gray-700 dark:text-zinc-300">te devolvemos tu dinero en los primeros 30 días.</strong>
+      </p>
     </div>
   </div>
 </section>
 
-<!-- ░░░░░░░░░░░░░░░░ FAQ ░░░░░░░░░░░░░░░░ -->
-<section class="relative z-10 py-24 bg-gray-50 dark:bg-[#0b0b14]">
-  <div class="max-w-2xl mx-auto px-5 sm:px-8">
-    <div class="text-center mb-12">
-      <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">FAQ</p>
-      <h2 class="text-3xl sm:text-4xl font-black tracking-tight" data-en="Quick answers" data-es="Respuestas rápidas">Quick answers</h2>
-    </div>
-
-    <div class="space-y-3" id="faq">
-      <div class="faq-item rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] overflow-hidden">
-        <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left" onclick="toggleFaq(this)">
-          <span class="font-semibold text-sm" data-en="Is it hard to set up?" data-es="¿Es difícil de configurar?">Is it hard to set up?</span>
-          <svg class="faq-icon flex-shrink-0 transition-transform duration-300" width="16" height="16" fill="none" viewBox="0 0 16 16">
-            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="faq-body px-5">
-          <p class="text-sm text-gray-500 dark:text-zinc-400 pb-4 leading-relaxed" data-en="Not at all. Setup takes under 10 minutes. You add your services, set your hours, and share your booking link. No technical knowledge needed." data-es="Para nada. La configuración tarda menos de 10 minutos. Añades tus servicios, pones horarios y compartes tu enlace de reservas. Sin conocimientos técnicos.">Not at all. Setup takes under 10 minutes. You add your services, set your hours, and share your booking link. No technical knowledge needed.</p>
-        </div>
-      </div>
-
-      <div class="faq-item rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] overflow-hidden">
-        <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left" onclick="toggleFaq(this)">
-          <span class="font-semibold text-sm" data-en="Does it really work with WhatsApp?" data-es="¿De verdad funciona con WhatsApp?">Does it really work with WhatsApp?</span>
-          <svg class="faq-icon flex-shrink-0 transition-transform duration-300" width="16" height="16" fill="none" viewBox="0 0 16 16">
-            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="faq-body px-5">
-          <p class="text-sm text-gray-500 dark:text-zinc-400 pb-4 leading-relaxed" data-en="Yes. We use the official WhatsApp Business API to send confirmation and reminder messages automatically. Clients receive them just like a normal WhatsApp message." data-es="Sí. Usamos la API oficial de WhatsApp Business para enviar confirmaciones y recordatorios automáticamente. Los clientes lo reciben como un WhatsApp normal.">Yes. We use the official WhatsApp Business API to send confirmation and reminder messages automatically. Clients receive them just like a normal WhatsApp message.</p>
-        </div>
-      </div>
-
-      <div class="faq-item rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] overflow-hidden">
-        <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left" onclick="toggleFaq(this)">
-          <span class="font-semibold text-sm" data-en="How long until I see results?" data-es="¿Cuánto tardaré en ver resultados?">How long until I see results?</span>
-          <svg class="faq-icon flex-shrink-0 transition-transform duration-300" width="16" height="16" fill="none" viewBox="0 0 16 16">
-            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="faq-body px-5">
-          <p class="text-sm text-gray-500 dark:text-zinc-400 pb-4 leading-relaxed" data-en="Most barbershops see their first online booking within 24 hours of going live. No-show rates typically drop within the first week of using WhatsApp reminders." data-es="La mayoría de barberías ven su primera reserva online en 24 horas. Los no-shows suelen bajar durante la primera semana usando recordatorios por WhatsApp.">Most barbershops see their first online booking within 24 hours of going live. No-show rates typically drop within the first week of using WhatsApp reminders.</p>
-        </div>
-      </div>
-
-      <div class="faq-item rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] overflow-hidden">
-        <button class="faq-trigger w-full flex items-center justify-between px-5 py-4 text-left" onclick="toggleFaq(this)">
-          <span class="font-semibold text-sm" data-en="Can I cancel anytime?" data-es="¿Puedo cancelar cuando quiera?">Can I cancel anytime?</span>
-          <svg class="faq-icon flex-shrink-0 transition-transform duration-300" width="16" height="16" fill="none" viewBox="0 0 16 16">
-            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="faq-body px-5">
-          <p class="text-sm text-gray-500 dark:text-zinc-400 pb-4 leading-relaxed" data-en="Yes. Month-to-month, no contracts, no cancellation fees. Cancel with one click from your dashboard." data-es="Sí. Mes a mes, sin contratos ni penalizaciones. Cancela con un clic desde tu panel.">Yes. Month-to-month, no contracts, no cancellation fees. Cancel with one click from your dashboard.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ░░░░░░░░░░░░░░░░ CTA BANNER ░░░░░░░░░░░░░░░░ -->
-<section class="relative z-10 py-20 bg-red-600">
-  <div class="max-w-3xl mx-auto px-5 sm:px-8 text-center">
-    <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">
-      <span data-en="Ready to fill your barbershop?" data-es="¿Listo para llenar tu barbería?">Ready to fill your barbershop?</span>
-    </h2>
-    <p class="text-red-100 mb-8 max-w-sm mx-auto" data-en="14-day free trial. Setup in 10 minutes. No credit card needed." data-es="Prueba gratis 14 días. Configuración en 10 minutos. Sin tarjeta.">14-day free trial. Setup in 10 minutes. No credit card needed.</p>
-    <a href="#pricing"
-       class="inline-flex items-center gap-2 bg-white text-red-600 font-bold
-              px-8 py-4 rounded-xl text-sm hover:bg-red-50 transition-colors">
-      <span data-en="Get started free" data-es="Empieza gratis">Get started free</span>
-      <svg width="15" height="15" fill="none" viewBox="0 0 15 15">
-        <path d="M3 7.5h9M8.5 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
-  </div>
-</section>
-
-<!-- ░░░░░░░░░░░░░░░░ FOOTER ░░░░░░░░░░░░░░░░ -->
-<footer class="relative z-10 py-8 border-t border-gray-100 dark:border-white/[.06]
-               bg-[#f6f8ff] dark:bg-[#07070e]">
+<!-- ════════════ FOOTER ════════════ -->
+<footer class="relative z-10 py-8 border-t border-gray-100 dark:border-white/[.06] bg-[#f6f8ff] dark:bg-[#07070e]">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
     <div class="flex items-center gap-2">
-      <div class="w-6 h-6 rounded-md bg-red-600 flex items-center justify-center">
-        <svg width="11" height="11" fill="white" viewBox="0 0 14 14"><path d="M7 1.5l5.5 3.2v6.6L7 14.5 1.5 11.3V4.7L7 1.5z"/></svg>
-      </div>
+      <div class="w-6 h-6 rounded-md bg-red-600 flex items-center justify-center"><svg width="11" height="11" fill="white" viewBox="0 0 14 14"><path d="M7 1.5l5.5 3.2v6.6L7 14.5 1.5 11.3V4.7L7 1.5z"/></svg></div>
       <span class="text-sm font-bold">aiblop</span>
     </div>
-    <p class="text-[12px] text-gray-400 dark:text-zinc-500" data-en="© 2026 aiblop. Built to fill chairs." data-es="© 2026 aiblop. Hecho para llenar sillas.">© 2026 aiblop. Built to fill chairs.</p>
-    <div class="flex gap-5 text-[12px] text-gray-400 dark:text-zinc-500">
-      <a href="#" class="hover:text-gray-900 dark:hover:text-white transition-colors" data-en="Privacy" data-es="Privacidad">Privacy</a>
-      <a href="#" class="hover:text-gray-900 dark:hover:text-white transition-colors" data-en="Terms" data-es="Términos">Terms</a>
-      <a href="#" class="hover:text-gray-900 dark:hover:text-white transition-colors" data-en="Contact" data-es="Contacto">Contact</a>
-    </div>
+    <p class="text-[12px] text-gray-400 dark:text-zinc-500">© 2026 aiblop.</p>
+    <a href="#" class="text-[12px] text-gray-400 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-white transition-colors">Legal</a>
   </div>
 </footer>
 
-<!-- ░░░░░░░░░░░░░░░░ SCRIPTS ░░░░░░░░░░░░░░░░ -->
+<!-- ════════════ SCRIPTS ════════════ -->
 <script>
-  // ── Theme ──
+  // ── VARIABLES GLOBALES ─────────────────────────────────────────
+  // Cambia estos valores aquí para actualizarlos en toda la página
+  const STATS = {
+    totalBarberias:           500,   // Nº de barberías usando aiblop
+    reservasSemana:           283,   // Reservas llenadas esta semana
+    reduccionInasistencias:   80,    // % de reducción de no-shows
+    ingresoExtraMes:          620,   // € extra de media al mes
+  };
+
+  // ── TEMA ───────────────────────────────────────────────────────
   function toggleTheme() {
-    const html = document.documentElement;
-    const isDark = html.classList.toggle('dark');
+    const h = document.documentElement;
+    const isDark = h.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }
 
-  let currentLang = localStorage.getItem('lang') || 'en';
+  // ── INICIALIZAR STATS ──────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    const hb = document.getElementById('hero-bookings');
+    if (hb) hb.textContent = STATS.reservasSemana + ' reservas';
+  });
 
-  function setLanguage(lang) {
-    currentLang = lang === 'es' ? 'es' : 'en';
-    localStorage.setItem('lang', currentLang);
-    document.documentElement.lang = currentLang;
-
-    document.querySelectorAll('[data-en][data-es]').forEach(el => {
-      el.textContent = currentLang === 'es' ? el.dataset.es : el.dataset.en;
-    });
-    document.querySelectorAll('[data-en-html][data-es-html]').forEach(el => {
-      el.innerHTML = currentLang === 'es' ? el.dataset.esHtml : el.dataset.enHtml;
-    });
-
-    words = currentLang === 'es'
-      ? ['cortes', 'color', 'balayage', 'clientes']
-      : ['haircuts', 'color', 'balayage', 'clients'];
-    wIdx = 0;
-    rw.textContent = words[0];
-
-    const langBtn = document.getElementById('lang-btn');
-    if (langBtn) langBtn.textContent = currentLang === 'es' ? 'EN' : 'ES';
-
-    document.querySelectorAll('.booking-service[data-service]').forEach(el => {
-      el.textContent = serviceMap[currentLang][el.dataset.service];
-    });
-    document.querySelectorAll('.booking-confirmed').forEach(el => {
-      el.textContent = labels[currentLang].confirmed;
-    });
-  }
-
-  function toggleLang() {
-    setLanguage(currentLang === 'es' ? 'en' : 'es');
-  }
-
-  // ── Word rotation ──
-  let words = ['haircuts', 'color', 'balayage', 'clients'];
+  // ── WORD ROTATION (citas / reservas) ───────────────────────────
+  const words = ['citas', 'reservas'];
   let wIdx = 0;
   const rw = document.getElementById('rw');
-  setInterval(() => {
+  if (rw) setInterval(() => {
     rw.classList.add('out');
     setTimeout(() => {
       wIdx = (wIdx + 1) % words.length;
       rw.textContent = words[wIdx];
       rw.classList.remove('out');
-    }, 290);
-  }, 2600);
+    }, 280);
+  }, 2400);
 
-  // ── Hero calendar slots ──
+  // ── HERO CALENDAR SLOTS ────────────────────────────────────────
   document.querySelectorAll('.slot[data-ms]').forEach(el => {
     setTimeout(() => el.classList.add('show'), +el.dataset.ms);
   });
-
-  // ── Hero floating cards ──
   document.querySelectorAll('.fc[data-fms]').forEach(el => {
     setTimeout(() => el.classList.add('show'), +el.dataset.fms);
   });
-
-  // ── Hero booking counter ──
   let hbc = 3;
-  setInterval(() => { document.getElementById('hbc').textContent = ++hbc; }, 9000);
+  setInterval(() => { const el = document.getElementById('hbc'); if (el) el.textContent = ++hbc; }, 9000);
 
-  // ── FAQ accordion ──
-  function toggleFaq(btn) {
-    const body = btn.nextElementSibling;
-    const icon = btn.querySelector('.faq-icon');
-    const isOpen = body.classList.contains('open');
-    document.querySelectorAll('.faq-body').forEach(b => b.classList.remove('open'));
-    document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = '');
-    if (!isOpen) {
-      body.classList.add('open');
-      icon.style.transform = 'rotate(180deg)';
-    }
+  // ── CAROUSEL ──────────────────────────────────────────────────
+  let currentSlide = 0;
+
+  function updateTabStyles(idx) {
+    document.querySelectorAll('.slide-tab').forEach((t, i) => {
+      const on = i === idx;
+      t.className = 'slide-tab px-4 py-2 rounded-full text-xs font-semibold border transition-colors ' +
+        (on ? 'border-red-600 bg-red-600 text-white' : 'border-gray-200 dark:border-white/10 text-gray-500 dark:text-zinc-400 hover:border-gray-400 dark:hover:border-white/30 bg-transparent');
+    });
+    document.querySelectorAll('.slide-dot').forEach((d, i) => {
+      d.className = 'slide-dot w-2 h-2 rounded-full transition-all ' + (i === idx ? 'bg-red-600 w-4' : 'bg-gray-300 dark:bg-zinc-600');
+    });
   }
 
-  // ── Demo: booking list ──
-  const serviceMap = {
-    en: { haircut: 'Haircut', beard: 'Beard trim', color: 'Color', full: 'Full cut' },
-    es: { haircut: 'Corte', beard: 'Arreglo de barba', color: 'Color', full: 'Corte completo' },
-  };
-  const labels = {
-    en: { confirmed: 'Confirmed' },
-    es: { confirmed: 'Confirmado' },
-  };
-  const clients = [
-    { name:'Marco R.', serviceKey:'haircut', time:'09:00', color:'red' },
-    { name:'Kevin D.', serviceKey:'beard', time:'09:00', color:'blue' },
-    { name:'James T.', serviceKey:'color', time:'09:00', color:'amber' },
-    { name:'Ali M.',   serviceKey:'full',  time:'10:30', color:'teal' },
-    { name:'Carlos B.',serviceKey:'haircut',   time:'10:30', color:'red' },
-  ];
-  const colorMap = {
-    red:   'border-red-200 dark:border-red-500/25 bg-red-50 dark:bg-red-500/[.08] text-red-600 dark:text-red-300',
-    blue:  'border-blue-200 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/[.08] text-blue-600 dark:text-blue-300',
-    amber: 'border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/[.08] text-amber-700 dark:text-amber-300',
-    teal:  'border-teal-200 dark:border-teal-500/20 bg-teal-50 dark:bg-teal-500/[.08] text-teal-600 dark:text-teal-300',
-  };
+  function setSlide(idx) {
+    document.querySelectorAll('.slide').forEach((s, i) => s.classList.toggle('active', i === idx));
+    updateTabStyles(idx);
+    currentSlide = idx;
 
-  const list = document.getElementById('booking-list');
-  const revEl = document.getElementById('rev');
-  const todayEl = document.getElementById('today-count');
-  let rev = 384, shown = 0;
-
-  function addBooking() {
-    if (shown >= clients.length) return;
-    const c = clients[shown++];
-    const item = document.createElement('div');
-    item.className = `flex items-center justify-between rounded-xl border px-3.5 py-2.5 opacity-0 transition-opacity duration-400 ${colorMap[c.color]}`;
-    item.innerHTML = `
-      <div class="flex items-center gap-2.5">
-        <div class="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold border ${colorMap[c.color]}">${c.name[0]}</div>
-        <div>
-          <p class="text-[12px] font-semibold leading-tight">${c.name}</p>
-          <p class="booking-service text-[10px] text-gray-400" data-service="${c.serviceKey}">${serviceMap[currentLang][c.serviceKey]}</p>
-        </div>
-      </div>
-      <div class="text-right">
-        <p class="text-[11px] font-semibold">${c.time}</p>
-        <span class="booking-confirmed text-[9px] px-1.5 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 font-medium">${labels[currentLang].confirmed}</span>
-      </div>`;
-    list.prepend(item);
-    requestAnimationFrame(() => { item.style.opacity = '1'; });
-    rev += 48;
-    revEl.textContent = rev;
-    todayEl.textContent = shown + 8;
+    if (idx === 0) resetSlide0();
+    if (idx === 2) resetDelay();
   }
 
-  // Stagger demo bookings
-  clients.forEach((_, i) => setTimeout(addBooking, 1200 + i * 2500));
+  function goSlide(idx) {
+    setSlide(idx);
+  }
 
-  // Rebooking WhatsApp message
-  setTimeout(() => {
-    const ti = document.getElementById('typing-indicator');
-    const rb = document.getElementById('rebooking-msg');
-    ti.style.opacity = '1';
+  function nextSlide() { setSlide((currentSlide + 1) % 3); }
+  function prevSlide() { setSlide((currentSlide + 2) % 3); }
+
+  function resetSlide0() {
+    const row = document.getElementById('new-booking-row');
+    const msg = document.getElementById('slide0-msg');
+    const btn = document.getElementById('confirm-cita-btn');
+    const done = document.getElementById('confirm-cita-done');
+    const badge = document.getElementById('new-booking-badge');
+    if (row) { row.style.opacity = '0'; row.style.transform = ''; }
+    if (msg) msg.style.opacity = '0';
+    if (btn) btn.classList.remove('hidden');
+    if (done) done.classList.add('hidden');
+    if (badge) { badge.textContent = '¡Nueva!'; badge.className = 'text-[9px] px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 font-medium'; }
+  }
+
+  function confirmSlide0() {
+    const row = document.getElementById('new-booking-row');
+    const msg = document.getElementById('slide0-msg');
+    const btn = document.getElementById('confirm-cita-btn');
+    const done = document.getElementById('confirm-cita-done');
+    const badge = document.getElementById('new-booking-badge');
+    // 1: show the booking row
+    if (row) { row.style.opacity = '1'; row.style.transform = 'scale(1)'; }
+    // 2: change badge to confirmed
     setTimeout(() => {
-      ti.style.opacity = '0';
-      rb.style.opacity = '1';
-    }, 1800);
-  }, 5000);
+      if (badge) { badge.textContent = 'Confirmado'; badge.className = 'text-[9px] px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 font-medium check-in'; }
+    }, 400);
+    // 3: send WhatsApp message to phone
+    setTimeout(() => { if (msg) msg.style.opacity = '1'; }, 800);
+    // 4: show done confirmation
+    setTimeout(() => {
+      if (btn) btn.classList.add('hidden');
+      if (done) done.classList.remove('hidden');
+    }, 1200);
+  }
 
-  setLanguage(currentLang);
+  // Init
+  setSlide(0);
+
+  // ── DELAY WIDGET ──────────────────────────────────────────────
+  let selectedDelay = 10;
+
+  function selectDelay(btn, mins) {
+    selectedDelay = mins;
+    const dmp = document.getElementById('delay-min-phone');
+    if (dmp) dmp.textContent = mins;
+    document.querySelectorAll('.delay-btn').forEach(b => {
+      b.className = 'delay-btn px-3 py-1.5 rounded-lg border text-[11px] font-semibold border-gray-200 dark:border-white/10 bg-white dark:bg-white/[.05] text-gray-600 dark:text-zinc-300 hover:border-amber-400 hover:text-amber-600 transition-colors';
+    });
+    btn.className = 'delay-btn px-3 py-1.5 rounded-lg border text-[11px] font-semibold border-amber-500 bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 transition-colors';
+  }
+
+  function sendDelay() {
+    const btn = document.getElementById('send-delay-btn');
+    const sent = document.getElementById('delay-sent');
+    const pm = document.getElementById('delay-phone-msg');
+    if (!btn) return;
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.classList.add('hidden');
+      if (sent) sent.classList.remove('hidden');
+      if (pm) pm.style.opacity = '1';
+    }, 900);
+  }
+
+  function resetDelay() {
+    const btn = document.getElementById('send-delay-btn');
+    const sent = document.getElementById('delay-sent');
+    const pm = document.getElementById('delay-phone-msg');
+    if (btn) {
+      btn.classList.remove('hidden');
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="13" height="13" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Enviar aviso por WhatsApp';
+    }
+    if (sent) sent.classList.add('hidden');
+    if (pm) pm.style.opacity = '0';
+  }
 </script>
 </body>
 </html>
