@@ -63,6 +63,44 @@
     html:not(.dark) .price-shadow { box-shadow: 0 0 0 1px rgba(220,38,38,.15), 0 40px 110px rgba(37,99,235,.10), 0 30px 80px rgba(220,38,38,.08); }
     :target { scroll-margin-top: 80px; }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after{ animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+
+    /* ── MÓVIL ONLY (max 1023px) ─────────────────────────────────── */
+    @media (max-width: 1023px) {
+      /* Float cards: se desbordan en móvil, fuera */
+      .fc { display: none !important; }
+
+      /* Hero: quitar min-height para que no sobre espacio con calendario oculto */
+      .hero-grid { min-height: auto !important; padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
+
+      /* Secciones: reducir padding vertical */
+      .sec-py { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
+      .sec-mb { margin-bottom: 2.5rem !important; }
+      .step-grid { margin-bottom: 2rem !important; }
+    }
+
+    @media (max-width: 639px) {
+      /* Hero h1: ligeramente más compacto */
+      .hero-h1 { font-size: 2.1rem !important; line-height: 1.1 !important; }
+
+      /* Demo tabs: scroll horizontal en lugar de wrap */
+      .demo-tabs { overflow-x: auto; overflow-y: hidden; justify-content: flex-start !important;
+                   flex-wrap: nowrap !important; padding-bottom: 4px; -webkit-overflow-scrolling: touch;
+                   scrollbar-width: none; }
+      .demo-tabs::-webkit-scrollbar { display: none; }
+      .demo-tabs .slide-tab { white-space: nowrap; flex-shrink: 0; }
+
+      /* Steps: reducir padding interno */
+      .step-card { padding: 1.25rem !important; }
+
+      /* FAQ cards: reducir padding */
+      .faq-card { padding: 1rem !important; }
+
+      /* Badges navbar: acortar badge hero */
+      .hero-badge span:last-child { display: none; }
+
+      /* Precio card: reducir padding */
+      .price-card { padding: 1.5rem !important; }
+    }
   </style>
 </head>
 <body class="bg-[#f6f8ff] dark:bg-[#07070e] text-gray-900 dark:text-white transition-colors duration-300">
@@ -97,8 +135,11 @@
         <svg class="hidden dark:block" width="15" height="15" fill="none" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M7.5 1v1.5M7.5 12.5V14M1 7.5h1.5M12.5 7.5H14M3.3 3.3l1 1M10.7 10.7l1 1M10.7 3.3l-1 1M3.3 10.7l-1 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         <svg class="block dark:hidden" width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M12 9a6 6 0 01-7.5-7.5A6 6 0 1012 9z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       </button>
-      <a href="#precio" class="text-sm font-semibold bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
+      <a href="#precio" class="hidden sm:inline-flex text-sm font-semibold bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition-colors whitespace-nowrap">
         Empieza — 30 días de garantía
+      </a>
+      <a href="#precio" class="sm:hidden text-sm font-semibold bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-xl transition-colors">
+        Empezar
       </a>
     </div>
   </div>
@@ -106,7 +147,7 @@
 
 <!-- ════════════ HERO ════════════ -->
 <section class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 xl:px-12">
-  <div class="grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 items-center min-h-[calc(100vh-64px)] py-14 lg:py-0">
+  <div class="hero-grid grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 items-center min-h-[calc(100vh-64px)] py-14 lg:py-0">
 
     <!-- Izquierda -->
     <div>
@@ -115,7 +156,7 @@
         Gestiona tu calendario mejor que tu barbería vecina
       </div>
 
-      <h1 class="h-in text-[2.6rem] sm:text-5xl lg:text-[3.4rem] font-black leading-[1.08] tracking-[-0.035em] mb-5" style="animation-delay:.1s">
+      <h1 class="hero-h1 h-in text-[2.6rem] sm:text-5xl lg:text-[3.4rem] font-black leading-[1.08] tracking-[-0.035em] mb-5" style="animation-delay:.1s">
         No más huecos<br>vacíos.<br>
         <span style="white-space:nowrap"><span class="text-gray-500 dark:text-zinc-300 font-extrabold">Organiza tus</span>
         <span id="rw" class="text-red-600">citas</span></span><br>
@@ -148,10 +189,26 @@
           <span class="text-gray-900 dark:text-zinc-100 font-semibold" id="hero-bookings"></span> llenadas esta semana
         </p>
       </div>
+
+      <!-- Stats strip — solo móvil, reemplaza al calendario -->
+      <div class="lg:hidden mt-8 grid grid-cols-3 divide-x divide-gray-100 dark:divide-white/[.06] rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] overflow-hidden">
+        <div class="text-center px-3 py-4">
+          <p class="text-2xl font-black text-red-600">94<span class="text-base">%</span></p>
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 mt-0.5 leading-tight">Huecos<br>llenos</p>
+        </div>
+        <div class="text-center px-3 py-4">
+          <p class="text-2xl font-black text-emerald-600 dark:text-emerald-400">0</p>
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 mt-0.5 leading-tight">Inasis-<br>tencias</p>
+        </div>
+        <div class="text-center px-3 py-4">
+          <p class="text-2xl font-black">+€840</p>
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 mt-0.5 leading-tight">Extra<br>al mes</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Derecha: Calendario falso -->
-    <div class="h-in relative" style="animation-delay:.18s">
+    <!-- Derecha: Calendario falso — solo escritorio -->
+    <div class="h-in relative hidden lg:block" style="animation-delay:.18s">
       <div class="soft-shadow relative rounded-2xl border border-gray-100 dark:border-white/[.07] bg-gray-50 dark:bg-white/[.025] p-5 shadow-xl backdrop-blur-sm">
 
         <div class="flex items-start justify-between mb-5">
@@ -291,14 +348,14 @@
 </section>
 
 <!-- ════════════ CÓMO FUNCIONA ════════════ -->
-<section id="como" class="relative z-10 py-24 bg-gray-50 dark:bg-[#0b0b14]">
+<section id="como" class="sec-py relative z-10 py-24 bg-gray-50 dark:bg-[#0b0b14]">
   <div class="max-w-5xl mx-auto px-5 sm:px-8 text-center">
     <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">Diseñado para ser fácil</p>
     <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">Tres pasos para un calendario lleno</h2>
-    <p class="text-gray-500 dark:text-zinc-400 mb-16 max-w-md mx-auto">Configúralo una vez. Todo lo demás es automático.</p>
+    <p class="text-gray-500 dark:text-zinc-400 mb-10 sm:mb-16 max-w-md mx-auto">Configúralo una vez. Todo lo demás es automático.</p>
 
-    <div class="grid md:grid-cols-3 gap-6 mb-20">
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-7 text-left">
+    <div class="step-grid grid md:grid-cols-3 gap-4 sm:gap-6 mb-20">
+      <div class="step-card lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-7 text-left">
         <div class="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-500/[.12] border border-red-100 dark:border-red-500/20 flex items-center justify-center mb-5">
           <svg width="22" height="22" fill="none" viewBox="0 0 22 22"><rect x="2" y="4" width="18" height="16" rx="2" stroke="#dc2626" stroke-width="1.6"/><path d="M7 2v4M15 2v4M2 9h18" stroke="#dc2626" stroke-width="1.6" stroke-linecap="round"/><circle cx="7.5" cy="13.5" r="1.5" fill="#dc2626"/><circle cx="11" cy="13.5" r="1.5" fill="#dc2626"/></svg>
         </div>
@@ -307,7 +364,7 @@
         <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Comparte tu enlace. Los clientes eligen su hora 24/7, sin llamadas ni mensajes de WhatsApp de madrugada.</p>
       </div>
 
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-7 text-left">
+      <div class="step-card lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-7 text-left">
         <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/[.12] border border-blue-100 dark:border-blue-500/20 flex items-center justify-center mb-5">
           <svg width="22" height="22" fill="none" viewBox="0 0 22 22"><path d="M19.5 11.5a8.5 8.5 0 01-8.5 8.5 8.5 8.5 0 01-4.5-1.3L2 20l1.3-4.5A8.5 8.5 0 112.5 11.5" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round"/><path d="M8 11.5h.01M11 11.5h.01M14 11.5h.01" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
@@ -316,7 +373,7 @@
         <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Se envían solos 24h y 2h antes de cada cita. Las inasistencias desaparecen sin que toques nada.</p>
       </div>
 
-      <div class="lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-7 text-left">
+      <div class="step-card lift rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-7 text-left">
         <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-500/[.12] border border-amber-100 dark:border-amber-500/20 flex items-center justify-center mb-5">
           <svg width="22" height="22" fill="none" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" stroke="#d97706" stroke-width="1.6"/><path d="M11 7v4l3 2" stroke="#d97706" stroke-width="1.6" stroke-linecap="round"/></svg>
         </div>
@@ -330,22 +387,22 @@
     <div class="text-left max-w-2xl mx-auto space-y-4">
       <h3 class="text-2xl sm:text-3xl font-black tracking-tight text-gray-900 dark:text-white mb-8 text-center">Preguntas frecuentes</h3>
 
-      <div class="rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
+      <div class="faq-card rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
         <p class="font-semibold text-sm mb-2">¿Es difícil de configurar?</p>
         <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">No. La configuración tarda menos de 10 minutos. Añades tus servicios, pones tu horario y compartes tu enlace. Sin conocimientos técnicos.</p>
       </div>
 
-      <div class="rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
+      <div class="faq-card rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
         <p class="font-semibold text-sm mb-2">¿Funciona con WhatsApp?</p>
         <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Sí. Los mensajes de confirmación, recordatorio y aviso de retraso llegan al móvil del cliente como cualquier WhatsApp normal. Sin complicaciones.</p>
       </div>
 
-      <div class="rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
+      <div class="faq-card rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
         <p class="font-semibold text-sm mb-2">¿Cuánto tarda en verse resultados?</p>
         <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">La mayoría de barberías reciben su primera reserva online en las primeras 24 horas. Las inasistencias bajan desde la primera semana de uso.</p>
       </div>
 
-      <div class="rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
+      <div class="faq-card rounded-2xl border border-gray-100 dark:border-white/[.07] bg-white dark:bg-white/[.03] p-5">
         <p class="font-semibold text-sm mb-2">¿Puedo cancelar cuando quiera?</p>
         <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">Sí. Sin contratos ni permanencia. Cancelas cuando quieras desde tu panel con un clic.</p>
       </div>
@@ -354,7 +411,7 @@
 </section>
 
 <!-- ════════════ DEMO — CARRUSEL ════════════ -->
-<section id="demo" class="relative z-10 py-24 bg-[#f6f8ff] dark:bg-[#07070e]">
+<section id="demo" class="sec-py relative z-10 py-24 bg-[#f6f8ff] dark:bg-[#07070e]">
   <div class="max-w-5xl mx-auto px-5 sm:px-8">
     <div class="text-center mb-12">
       <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">Demo interactiva</p>
@@ -363,7 +420,7 @@
     </div>
 
     <!-- Tabs -->
-    <div class="flex justify-center gap-2 mb-8 flex-wrap">
+    <div class="demo-tabs flex justify-center gap-2 mb-8 flex-wrap">
       <button onclick="goSlide(0)" class="slide-tab px-4 py-2 rounded-full text-xs font-semibold border transition-colors" data-idx="0">📅 Nueva reserva</button>
       <button onclick="goSlide(1)" class="slide-tab px-4 py-2 rounded-full text-xs font-semibold border transition-colors" data-idx="1">🔔 Recordatorio automático</button>
       <button onclick="goSlide(2)" class="slide-tab px-4 py-2 rounded-full text-xs font-semibold border transition-colors" data-idx="2">⏰ Aviso de retraso</button>
@@ -522,7 +579,7 @@
 </section>
 
 <!-- ════════════ QUE NO TE PASE A TI ════════════ -->
-<section class="relative z-10 py-24 bg-gray-50 dark:bg-[#0b0b14]">
+<section class="sec-py relative z-10 py-24 bg-gray-50 dark:bg-[#0b0b14]">
   <div class="max-w-6xl mx-auto px-5 sm:px-8">
     <div class="text-center mb-14">
       <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">Que no te pase a ti</p>
@@ -579,13 +636,13 @@
 </section>
 
 <!-- ════════════ PRECIO ════════════ -->
-<section id="precio" class="relative z-10 py-24 bg-[#f6f8ff] dark:bg-[#07070e]">
+<section id="precio" class="sec-py relative z-10 py-24 bg-[#f6f8ff] dark:bg-[#07070e]">
   <div class="max-w-lg mx-auto px-5 sm:px-8 text-center">
     <p class="text-xs font-semibold uppercase tracking-widest text-red-600 dark:text-red-400 mb-3">Precio</p>
     <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">Un plan. Todo incluido.</h2>
     <p class="text-gray-500 dark:text-zinc-400 mb-12 max-w-sm mx-auto">Sin sorpresas, sin letra pequeña.</p>
 
-    <div class="rounded-2xl border-2 border-red-600/50 bg-gray-50 dark:bg-white/[.03] p-8 relative text-left"
+    <div class="price-card rounded-2xl border-2 border-red-600/50 bg-gray-50 dark:bg-white/[.03] p-8 relative text-left"
          style="box-shadow:0 0 0 1px rgba(220,38,38,.12),0 30px 80px rgba(220,38,38,.06)">
       <div class="absolute top-5 right-5">
         <span class="bg-red-600 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">Más popular</span>
