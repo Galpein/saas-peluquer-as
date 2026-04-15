@@ -82,12 +82,10 @@
       /* Hero h1: ligeramente más compacto */
       .hero-h1 { font-size: 2.1rem !important; line-height: 1.1 !important; }
 
-      /* Demo tabs: scroll horizontal en lugar de wrap */
-      .demo-tabs { overflow-x: auto; overflow-y: hidden; justify-content: flex-start !important;
-                   flex-wrap: nowrap !important; padding-bottom: 4px; -webkit-overflow-scrolling: touch;
-                   scrollbar-width: none; }
-      .demo-tabs::-webkit-scrollbar { display: none; }
-      .demo-tabs .slide-tab { white-space: nowrap; flex-shrink: 0; }
+      /* Demo tabs: columna vertical en móvil */
+      .demo-tabs { flex-direction: column !important; align-items: stretch !important;
+                   justify-content: flex-start !important; gap: 0.5rem !important; }
+      .demo-tabs .slide-tab { width: 100%; text-align: left; padding-left: 1rem !important; }
 
       /* Steps: reducir padding interno */
       .step-card { padding: 1.25rem !important; }
